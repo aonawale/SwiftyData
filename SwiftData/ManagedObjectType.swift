@@ -49,3 +49,56 @@ public extension ManagedObjectType where Self: NSManagedObject {
         return String(self)
     }
 }
+
+public extension ManagedObjectType where Self: NSManagedObject {
+    static func findAll() -> [Self] {
+        return NSManagedObjectContext.defaultContext().findAll(Self)
+    }
+    
+    static func findById(id: NSManagedObjectID) -> Self? {
+        return NSManagedObjectContext.defaultContext().findById(self, id: id)
+    }
+    
+    static func findByNSURL(url: NSURL) -> Self? {
+        return NSManagedObjectContext.defaultContext().findByNSURL(self, url: url)
+    }
+}
+
+public extension ManagedObjectType where Self: NSManagedObject {
+    public static func create() -> Self {
+        return NSManagedObjectContext.defaultContext().create(Self)
+    }
+}
+
+public extension ManagedObjectType where Self: NSManagedObject {
+    public func save() -> Bool {
+        return Self.saveContext(self.managedObjectContext)
+    }
+    
+    public static func save() -> Bool {
+        return Self.saveContext(NSManagedObjectContext.defaultContext())
+    }
+    
+    private static func saveContext(context: NSManagedObjectContext?) -> Bool {
+        guard let unwrapedContext = context where unwrapedContext.hasChanges else {
+            return false
+        }
+        do {
+            try unwrapedContext.save()
+        } catch {
+            print("Unresolved error: \(error) while saving context for entity \(self)")
+            return false
+        }
+        return true
+    }
+}
+
+public extension ManagedObjectType where Self: NSManagedObject {
+    public func destroy() {
+        self.managedObjectContext?.deleteObject(self)
+    }
+    
+    public static func destroyAll() {
+        NSManagedObjectContext.defaultContext().destroyAll(self)
+    }
+}
