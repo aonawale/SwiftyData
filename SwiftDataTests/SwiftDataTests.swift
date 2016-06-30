@@ -143,4 +143,24 @@ class SwiftDataTests: XCTestCase {
         XCTAssertEqual(person.name, "Ahmed")
         XCTAssertEqual(person.age, 33)
     }
+    
+    func testQueryObjects() {
+        _ = Person.bulkCreate([.name: "Ayo", .age: 19], [.name: "Ahmed", .age: 29], [.name: "Onawale", .age: 32])
+        
+        let lessThan30 = Person.find(where: "age < %@", 30)
+        XCTAssertEqual(lessThan30.count, 2)
+        
+        let ahmeds = Person.find(where: "name == %@ AND age == %@", "Ahmed", 29)
+        XCTAssertEqual(ahmeds.count, 1)
+        XCTAssertEqual(ahmeds.first?.name, "Ahmed")
+        
+        let onawales = Person.find(where: [.name: "Onawale", .age: 32])
+        XCTAssertEqual(onawales.count, 1)
+        XCTAssertEqual(onawales.first?.name, "Ahmed")
+        XCTAssertEqual(onawales.first?.age, 32)
+        
+        let predicate = NSPredicate(format: "age > 18")
+        let greaterThan18 = Person.find(predicate: predicate)
+        XCTAssertEqual(greaterThan18.count, 3)
+    }
 }
