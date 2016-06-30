@@ -111,6 +111,7 @@ class SwiftDataTests: XCTestCase {
     
     func testReloadObject() {
         let person = Person.create([.name: "Ahmed", .age: 33])
+        XCTAssertTrue(person.save())
         person.update([.name: "Onawale", .age: 40])
         XCTAssertEqual(person.name, "Onawale")
         XCTAssertEqual(person.age, 40)

@@ -102,3 +102,9 @@ public extension ManagedObjectType where Self: NSManagedObject {
         NSManagedObjectContext.defaultContext().destroyAll(self)
     }
 }
+
+public extension ManagedObjectType where Self: NSManagedObject {
+    func reload() {
+        NSManagedObjectContext.defaultContext().refreshObject(self, mergeChanges: false)
+    }
+}

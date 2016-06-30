@@ -61,4 +61,8 @@ public extension KeyCodeable where Self: NSManagedObject, Key: Hashable, Key.Raw
     static func create(properties: [Key: AnyObject]) -> Self {
         return NSManagedObjectContext.defaultContext().create(self, properties: properties)
     }
+    
+    static func bulkCreate(properties: [Key: AnyObject]...) -> [Self] {
+        return properties.map { NSManagedObjectContext.defaultContext().create(self, properties: $0) }
+    }
 }
