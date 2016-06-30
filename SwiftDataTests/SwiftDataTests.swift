@@ -32,7 +32,7 @@ class SwiftDataTests: XCTestCase {
         Person.destroyAll()
     }
     
-    func testEmptyObject() {
+    func testCreateEmptyObject() {
         let person = Person.create()
         XCTAssertNotNil(person)
         XCTAssertEqual(person.name, "")
@@ -102,5 +102,22 @@ class SwiftDataTests: XCTestCase {
         XCTAssertFalse(person.save())
         person.setProperties([.name: "Onawale"])
         XCTAssertTrue(Person.save())
+    }
+    
+    func testBulkCreationOfObjects() {
+        let people = Person.bulkCreate([.name: "Ayo", .age: 19], [.name: "Ahmed", .age: 29], [.name: "Onawale", .age: 32])
+        XCTAssertEqual(people.count, 3)
+    }
+    
+    func testReloadObject() {
+        let person = Person.create([.name: "Ahmed", .age: 33])
+        person.update([.name: "Onawale", .age: 40])
+        XCTAssertEqual(person.name, "Onawale")
+        XCTAssertEqual(person.age, 40)
+        person.reload()
+        XCTAssertNotEqual(person.name, "Onawale")
+        XCTAssertNotEqual(person.age, 40)
+        XCTAssertEqual(person.name, "Ahmed")
+        XCTAssertEqual(person.age, 33)
     }
 }
