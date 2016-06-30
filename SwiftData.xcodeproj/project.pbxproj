@@ -12,6 +12,12 @@
 		85110E6C1D232E4800BC116D /* SwiftDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85110E6B1D232E4800BC116D /* SwiftDataTests.swift */; };
 		85110EAF1D2333E100BC116D /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85110E841D23336600BC116D /* Nimble.framework */; };
 		85110EB01D2333E700BC116D /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85110EA21D23337B00BC116D /* Quick.framework */; };
+		85110EB51D23369900BC116D /* ManagedObjectType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85110EB41D23369900BC116D /* ManagedObjectType.swift */; };
+		85110EB81D2336E600BC116D /* NSManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85110EB71D2336E600BC116D /* NSManagedObject.swift */; };
+		85110EBA1D23371D00BC116D /* NSManagedObjectContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85110EB91D23371D00BC116D /* NSManagedObjectContext.swift */; };
+		85110EC01D23454D00BC116D /* KeyCodeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85110EBF1D23454D00BC116D /* KeyCodeable.swift */; };
+		85110ED11D23EF2A00BC116D /* SwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85110ED01D23EF2A00BC116D /* SwiftData.swift */; };
+		85110F0E1D24408300BC116D /* SwiftDataTests.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 85110F0C1D24408300BC116D /* SwiftDataTests.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -138,6 +144,12 @@
 		85110E6D1D232E4800BC116D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		85110E7A1D23336600BC116D /* Nimble.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Nimble.xcodeproj; path = Carthage/Checkouts/Nimble/Nimble.xcodeproj; sourceTree = "<group>"; };
 		85110E8F1D23337B00BC116D /* Quick.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Quick.xcodeproj; path = Carthage/Checkouts/Quick/Quick.xcodeproj; sourceTree = "<group>"; };
+		85110EB41D23369900BC116D /* ManagedObjectType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedObjectType.swift; sourceTree = "<group>"; };
+		85110EB71D2336E600BC116D /* NSManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSManagedObject.swift; sourceTree = "<group>"; };
+		85110EB91D23371D00BC116D /* NSManagedObjectContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSManagedObjectContext.swift; sourceTree = "<group>"; };
+		85110EBF1D23454D00BC116D /* KeyCodeable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyCodeable.swift; sourceTree = "<group>"; };
+		85110ED01D23EF2A00BC116D /* SwiftData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftData.swift; sourceTree = "<group>"; };
+		85110F0D1D24408300BC116D /* SwiftDataTests.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SwiftDataTests.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +195,9 @@
 		85110E5E1D232E4800BC116D /* SwiftData */ = {
 			isa = PBXGroup;
 			children = (
+				85110EB61D2336D400BC116D /* Extensions */,
+				85110EB31D23368900BC116D /* Protocols */,
+				85110ED01D23EF2A00BC116D /* SwiftData.swift */,
 				85110E5F1D232E4800BC116D /* SwiftData.h */,
 				85110E611D232E4800BC116D /* Info.plist */,
 			);
@@ -194,6 +209,7 @@
 			children = (
 				85110E6B1D232E4800BC116D /* SwiftDataTests.swift */,
 				85110E6D1D232E4800BC116D /* Info.plist */,
+				85110F0C1D24408300BC116D /* SwiftDataTests.xcdatamodeld */,
 			);
 			path = SwiftDataTests;
 			sourceTree = "<group>";
@@ -234,6 +250,24 @@
 				85110E7A1D23336600BC116D /* Nimble.xcodeproj */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		85110EB31D23368900BC116D /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				85110EB41D23369900BC116D /* ManagedObjectType.swift */,
+				85110EBF1D23454D00BC116D /* KeyCodeable.swift */,
+			);
+			name = Protocols;
+			sourceTree = "<group>";
+		};
+		85110EB61D2336D400BC116D /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				85110EB71D2336E600BC116D /* NSManagedObject.swift */,
+				85110EB91D23371D00BC116D /* NSManagedObjectContext.swift */,
+			);
+			name = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -462,6 +496,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85110EC01D23454D00BC116D /* KeyCodeable.swift in Sources */,
+				85110EB51D23369900BC116D /* ManagedObjectType.swift in Sources */,
+				85110EBA1D23371D00BC116D /* NSManagedObjectContext.swift in Sources */,
+				85110EB81D2336E600BC116D /* NSManagedObject.swift in Sources */,
+				85110ED11D23EF2A00BC116D /* SwiftData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -470,6 +509,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				85110E6C1D232E4800BC116D /* SwiftDataTests.swift in Sources */,
+				85110F0E1D24408300BC116D /* SwiftDataTests.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -578,6 +618,7 @@
 		85110E711D232E4800BC116D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -589,12 +630,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ahmedonawale.SwiftData;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		85110E721D232E4800BC116D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -660,6 +703,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		85110F0C1D24408300BC116D /* SwiftDataTests.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				85110F0D1D24408300BC116D /* SwiftDataTests.xcdatamodel */,
+			);
+			currentVersion = 85110F0D1D24408300BC116D /* SwiftDataTests.xcdatamodel */;
+			path = SwiftDataTests.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 85110E531D232E4800BC116D /* Project object */;
 }
