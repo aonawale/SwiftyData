@@ -41,7 +41,7 @@ class SwiftDataTests: XCTestCase {
     
     func testUpdateObject() {
         let person = Person.create()
-        person.setProperties([.name: "Ahmed", .age: 18])
+        person.update([.name: "Ahmed", .age: 18])
         XCTAssertEqual(person.name, "Ahmed")
         XCTAssertEqual(person.age, 18)
     }
@@ -50,7 +50,7 @@ class SwiftDataTests: XCTestCase {
         let person = Person.create([.name: "Onawale", .age: 20])
         XCTAssertEqual(person.name, "Onawale")
         XCTAssertEqual(person.age, 20)
-        let prop = person.getProperties([.name, .age])
+        let prop = person.get([.name, .age])
         XCTAssertEqual(prop["name"] as? String, "Onawale")
         XCTAssertEqual(prop["age"] as? Int, 20)
     }
