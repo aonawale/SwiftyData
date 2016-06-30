@@ -121,6 +121,56 @@ public extension NSManagedObjectContext {
 }
 
 /*
+ Extension methods for querying NSManagedObject.
+ */
+public extension NSManagedObjectContext {
+    /// This method finds and return all objects of type entity
+    /// matching the specified dictionary Key and Value.
+    /// - Parameters:
+    ///   - entity: The type of object to find. // e.g: NSManagedObject.self
+    ///   - where: A dictionary specifying they keys and value to find.
+    /// - Returns: An array of objects of type entity.
+    public func find<T: NSManagedObject where T: ManagedObjectType, T: KeyCodeable>
+        (entity: T.Type, where: [T.Key: AnyObject]) -> [T] {
+        let fetchRequest = NSFetchRequest(entityName: entity.entityName)
+        fetchRequest.predicate = predicateFor(entity, condition: `where`)
+        return fetchEntities(entity, fetchRequest: fetchRequest)
+    }
+    
+    /// This method finds and return all objects of type entity
+    /// matching the specified format string.
+    /// - Parameters:
+    ///   - entity: The type of object to find. // e.g: NSManagedObject.self
+    ///   - where: The format string for the new predicate.
+    ///   - argList: The arguments to substitute into predicate format Values are
+    ///     substituted into where format string in the order they appear in the argument list.
+    /// - Returns: An array of objects of type entity.
+    public func find<T: NSManagedObject where T: ManagedObjectType>
+        (entity: T.Type, where: AnyObject, _ argList: AnyObject...) -> [T] {
+        let args = argList.first as? [AnyObject] ?? argList
+        let fetchRequest = NSFetchRequest(entityName: entity.entityName)
+        fetchRequest.predicate = predicateFor(entity, condition: `where`, args: args)
+        return fetchEntities(entity, fetchRequest: fetchRequest)
+    }
+    
+    private func predicateFor<T>(entity: T.Type, condition: AnyObject, args: [AnyObject]) -> NSPredicate {
+        switch condition {
+        case let condition as NSPredicate:
+            return condition
+        case let condition as String:
+            return NSPredicate(format: condition, argumentArray: args)
+        default:
+            return NSPredicate()
+        }
+    }
+    
+    private func predicateFor<T where T: KeyCodeable, T.Key: Hashable>
+        (entity: T.Type, condition: [T.Key: AnyObject]) -> NSPredicate {
+        return entity.predicateFromDictionary(condition)
+    }
+}
+
+/*
  Extension methods for deleting NSManagedObject.
 */
 public extension NSManagedObjectContext {

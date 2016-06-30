@@ -57,7 +57,7 @@ public extension ManagedObjectType where Self: NSManagedObject {
     /// This method fetches all objects of type Self from the persistent stores into the context.
     /// The default context will match the results from persistent stores with current changes 
     /// in the context (so inserted objects are returned even if they are not persisted yet).
-    /// - Returns: An array of objects of type Self
+    /// - Returns: An array of objects of type Self.
     static func findAll() -> [Self] {
         return NSManagedObjectContext.defaultContext().findAll(Self)
     }
@@ -76,6 +76,33 @@ public extension ManagedObjectType where Self: NSManagedObject {
     /// - Returns: An object of type Self or nil if no object with that NSURL exist.
     static func findByNSURL(url: NSURL) -> Self? {
         return NSManagedObjectContext.defaultContext().findByNSURL(self, url: url)
+    }
+}
+
+/*
+ Extension methods for querying NSManagedObject
+ */
+public extension ManagedObjectType where Self: NSManagedObject {
+    /// This method finds and return all objects of type Self
+    /// matching the specified format string.
+    /// - Parameters:
+    ///   - where: The format string for the new predicate.
+    ///   - argList: The arguments to substitute into predicate format Values are
+    ///     substituted into where format string in the order they appear in the argument list.
+    /// - Returns: An array of objects of type Self.
+    static func find(where where: AnyObject, _ argList: AnyObject...) -> [Self] {
+        return NSManagedObjectContext.defaultContext().find(self, where: `where`, argList)
+    }
+}
+
+public extension ManagedObjectType where Self: NSManagedObject, Self: KeyCodeable, Self.Key: Hashable {
+    /// This method finds and return all objects of type Self
+    /// matching the specified dictionary Key and Value.
+    /// - Parameters:
+    ///   - where: A dictionary specifying they keys and value to find.
+    /// - Returns: An array of objects of type Self.
+    static func find(where where: [Key: AnyObject]) -> [Self] {
+        return NSManagedObjectContext.defaultContext().find(self, where: `where`)
     }
 }
 

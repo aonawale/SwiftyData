@@ -156,11 +156,11 @@ class SwiftDataTests: XCTestCase {
         
         let onawales = Person.find(where: [.name: "Onawale", .age: 32])
         XCTAssertEqual(onawales.count, 1)
-        XCTAssertEqual(onawales.first?.name, "Ahmed")
+        XCTAssertEqual(onawales.first?.name, "Onawale")
         XCTAssertEqual(onawales.first?.age, 32)
         
         let predicate = NSPredicate(format: "age > 18")
-        let greaterThan18 = Person.find(predicate: predicate)
+        let greaterThan18 = Person.find(where: predicate)
         XCTAssertEqual(greaterThan18.count, 3)
     }
 }

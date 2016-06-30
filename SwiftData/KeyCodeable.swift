@@ -91,3 +91,21 @@ public extension KeyCodeable where Self: NSManagedObject, Key: Hashable, Key.Raw
         return properties.map { NSManagedObjectContext.defaultContext().create(self, properties: $0) }
     }
 }
+
+/*
+ Extension method for creating NSPredicate from Dictionary.
+ */
+public extension KeyCodeable where Key: Hashable {
+    /// Construct a NSPredicate from a Dictionary.
+    /// - Parameter dictionary: A Dictionary of type [Key: AnyObject].
+    /// - Returns: An instance of NSPredicate with string format and 
+    ///   arguments from the specified dictionary parameter.
+    static func predicateFromDictionary(dictionary: [Key: AnyObject]) -> NSPredicate {
+        var args = [AnyObject]()
+        let format = dictionary.reduce("") { (pre, next) in
+            args.append(next.1)
+            return pre.isEmpty ? "\(next.0) == %@" : "\(pre) AND \(next.0) == %@"
+        }
+        return NSPredicate(format: format, argumentArray: args)
+    }
+}
