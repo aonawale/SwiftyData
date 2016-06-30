@@ -31,25 +31,43 @@
 import CoreData
 
 public extension NSManagedObjectContext {
+    /// This method returns the default NSManagedObjectContext used.
+    /// - Returns: The default NSManagedObjectContext used.
     public static func defaultContext() -> NSManagedObjectContext {
         return SwiftData.sharedInstance.managedObjectContext
     }
 }
 
+/*
+ Extension methods for creating NSManagedObject.
+*/
 public extension NSManagedObjectContext {
-    public func create<T: NSManagedObject where T: ManagedObjectType>(record: T.Type) -> T {
-        guard let object = NSEntityDescription.insertNewObjectForEntityForName(record.entityName, inManagedObjectContext: self) as? T else {
-            fatalError("Entity \(record.entityName) does not correspond to \(record.self)")
+    /// This method to create a new instance of NSManagedObject.
+    /// - Parameter entity: The type of object to create. // e.g: NSManagedObject.self
+    /// - Returns: A new instance of object type entity.
+    public func create<T: NSManagedObject where T: ManagedObjectType>(entity: T.Type) -> T {
+        guard let object = NSEntityDescription.insertNewObjectForEntityForName(entity.entityName, inManagedObjectContext: self) as? T else {
+            fatalError("Entity \(entity.entityName) does not correspond to \(entity.self)")
         }
         return object
     }
     
-    public func create<T: NSManagedObject where T: ManagedObjectType, T: KeyCodeable, T.Key.RawValue == String>(record: T.Type, properties: [T.Key: AnyObject]) -> T {
+    /// Creates a new instance of NSManagedObject with default properties values.
+    /// - Parameters:
+    ///   - entity: The type of object to create. // e.g: NSManagedObject.self
+    ///   - properties: A dictionary of type [Key: AnyObject], where Key is RawRepresentable.
+    /// - Returns: A new instance of object type entity.
+    public func create<T: NSManagedObject where T: ManagedObjectType, T: KeyCodeable, T.Key.RawValue == String>(entity: T.Type, properties: [T.Key: AnyObject]) -> T {
         let object = create(T)
         object.setProperties(properties)
         return object
     }
-    
+}
+
+/*
+ Extension methods for creating finding NSManagedObject.
+*/
+public extension NSManagedObjectContext {
     private func fetchEntities<T: NSManagedObject where T: ManagedObjectType>(type: T.Type, fetchRequest: NSFetchRequest) -> [T] {
         do {
             guard let entities = try executeFetchRequest(fetchRequest) as? [T] else {
@@ -62,8 +80,13 @@ public extension NSManagedObjectContext {
         }
     }
     
-    public func findAll<T: NSManagedObject where T: ManagedObjectType>(record: T.Type) -> [T] {
-        let fetchRequest = NSFetchRequest(entityName: record.entityName)
+    /// This method fetches all objects of type entity from the persistent stores into the context.
+    /// The context will match the results from persistent stores with current changes
+    /// in the context (so inserted objects are returned even if they are not persisted yet).
+    /// - Parameter entity: The type of object to create. // e.g: NSManagedObject.self
+    /// - Returns: An array of objects of type entity
+    public func findAll<T: NSManagedObject where T: ManagedObjectType>(entity: T.Type) -> [T] {
+        let fetchRequest = NSFetchRequest(entityName: entity.entityName)
         return fetchEntities(T.self, fetchRequest: fetchRequest)
     }
     
@@ -77,15 +100,34 @@ public extension NSManagedObjectContext {
         return fetchEntities(T.self, fetchRequest: fetchRequest).first
     }
     
-    public func findByNSURL<T: NSManagedObject where T: ManagedObjectType>(record: T.Type, url: NSURL) -> T? {
+    /// Method to find and return an object of type entity associated
+    /// with the provided NSURL paramater.
+    /// - Parameter entity: The type of object to create. // e.g: NSManagedObject.self
+    /// - Parameter id: A NSURL. The object NSManagedObjectID property.
+    /// - Returns: An object of type entity or nil if no object with that NSURL exist.
+    public func findByNSURL<T: NSManagedObject where T: ManagedObjectType>(entity: T.Type, url: NSURL) -> T? {
         guard let managedObjectID = persistentStoreCoordinator?.managedObjectIDForURIRepresentation(url) else { return nil }
         return objectWithID(managedObjectID)
     }
     
-    public func findById<T: NSManagedObject where T: ManagedObjectType>(record: T.Type, id: NSManagedObjectID) -> T? {
+    /// Method to find and return an object of type entity associated
+    /// with the provided NSManagedObjectID paramater.
+    /// - Parameter entity: The type of object to create. // e.g: NSManagedObject.self
+    /// - Parameter id: The object NSManagedObjectID property.
+    /// - Returns: An object of type entity or nil if no object with that NSManagedObjectID exist.
+    public func findById<T: NSManagedObject where T: ManagedObjectType>(entity: T.Type, id: NSManagedObjectID) -> T? {
         return objectWithID(id)
     }
-    
+}
+
+/*
+ Extension methods for deleting NSManagedObject.
+*/
+public extension NSManagedObjectContext {
+    /// This method deletes all instances of type entity from the context.
+    /// Note - You'll need to ultimately save the context so that the deletion
+    /// can be persisted to the underlaying peristent store.
+    /// - Parameter entity: The type of object to create. // e.g: NSManagedObject.self
     public func destroyAll<T: NSManagedObject where T: ManagedObjectType>(entity: T.Type) {
         let fetchRequest = NSFetchRequest(entityName: entity.entityName)
         fetchRequest.includesPropertyValues = false

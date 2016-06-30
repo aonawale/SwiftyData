@@ -50,31 +50,61 @@ public extension ManagedObjectType where Self: NSManagedObject {
     }
 }
 
+/*
+ Extension methods for finding NSManagedObject
+ */
 public extension ManagedObjectType where Self: NSManagedObject {
+    /// This method fetches all objects of type Self from the persistent stores into the context.
+    /// The default context will match the results from persistent stores with current changes 
+    /// in the context (so inserted objects are returned even if they are not persisted yet).
+    /// - Returns: An array of objects of type Self
     static func findAll() -> [Self] {
         return NSManagedObjectContext.defaultContext().findAll(Self)
     }
     
+    /// Method to find and return an object of type Self associated
+    /// with the provided NSManagedObjectID paramater.
+    /// - Parameter id: The object NSManagedObjectID property.
+    /// - Returns: An object of type Self or nil if no object with that NSManagedObjectID exist
     static func findById(id: NSManagedObjectID) -> Self? {
         return NSManagedObjectContext.defaultContext().findById(self, id: id)
     }
     
+    /// Method to find and return an object of type Self with the object's
+    /// NSManagedObjectID URIRepresentation property
+    /// - Parameter id: A NSURL. The object NSManagedObjectID.URIRepresentation() property.
+    /// - Returns: An object of type Self or nil if no object with that NSURL exist.
     static func findByNSURL(url: NSURL) -> Self? {
         return NSManagedObjectContext.defaultContext().findByNSURL(self, url: url)
     }
 }
 
+/*
+ Extension methods for creating NSManagedObject
+ */
 public extension ManagedObjectType where Self: NSManagedObject {
+    /// Method to create a new instance of object type Self.
+    /// - Returns: A new instance of object type Self.
     public static func create() -> Self {
         return NSManagedObjectContext.defaultContext().create(Self)
     }
 }
 
+/*
+ Extension methods for saving NSManagedObject.
+ */
 public extension ManagedObjectType where Self: NSManagedObject {
+    /// This method calls save on the default NSManagedObjectContext.
+    /// The save is not performed if the default NSManagedObjectContext has no changes
+    /// or if the object the method is being called on is detached from it's context.
+    /// - Returns: A boolean value TRUE if the save is successful or FALSE if not.
     public func save() -> Bool {
         return Self.saveContext(self.managedObjectContext)
     }
     
+    /// This method calls save on the default NSManagedObjectContext.
+    /// The save is not performed if the default NSManagedObjectContext has no changes.
+    /// - Returns: A boolean value TRUE if the save is successful or FALSE if not.
     public static func save() -> Bool {
         return Self.saveContext(NSManagedObjectContext.defaultContext())
     }
@@ -93,17 +123,31 @@ public extension ManagedObjectType where Self: NSManagedObject {
     }
 }
 
+/*
+ Extension methods for deleting NSManagedObject.
+ */
 public extension ManagedObjectType where Self: NSManagedObject {
+    /// This method deletes the object the method is being called on from the context.
+    /// Note - You'll need to ultimately save the context so that the deletion
+    /// can be persisted to the underlaying peristent store.
     public func destroy() {
         self.managedObjectContext?.deleteObject(self)
     }
     
+    /// This method deletes all instances of type Self from the context.
+    /// Note - You'll need to ultimately save the context so that the deletion
+    /// can be persisted to the underlaying peristent store.
     public static func destroyAll() {
         NSManagedObjectContext.defaultContext().destroyAll(self)
     }
 }
 
+/*
+ Extension methods for reloading NSManagedObject persisted properties values.
+ */
 public extension ManagedObjectType where Self: NSManagedObject {
+    /// This method updates the persistent properties of the object this
+    /// method is called on to use the latest values from the persistent store.
     func reload() {
         NSManagedObjectContext.defaultContext().refreshObject(self, mergeChanges: false)
     }

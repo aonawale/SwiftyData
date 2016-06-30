@@ -30,11 +30,20 @@
 
 import CoreData
 
+/// This protocol outline requirements for a type that can
+/// represent it's properties as a RawRepresentable type.
 public protocol KeyCodeable {
     associatedtype Key: RawRepresentable
 }
 
+/*
+ Extension methods for updating and getting NSManagedObject properties.
+ NSManagedObject must conform to KeyCodeable and Key must be Hashable
+ and has a RawValue of typeString
+ */
 public extension KeyCodeable where Self: NSManagedObject, Key: Hashable, Key.RawValue == String {
+    /// Method to update the properties of a NSManagedObject.
+    /// - Parameter properties: A dictionary of type [Key: AnyObject], where Key is RawRepresentable.
     func setProperties(properties: [Key: AnyObject]) {
         let dictionary = properties.reduce([:]) { (previous, next) -> [String: AnyObject] in
             var previous = previous
@@ -44,24 +53,40 @@ public extension KeyCodeable where Self: NSManagedObject, Key: Hashable, Key.Raw
         setValuesForKeysWithDictionary(dictionary)
     }
     
+    /// Method to update the properties of a NSManagedObject.
+    /// - Parameter properties: A dictionary of type [Key: AnyObject], where Key is RawRepresentable.
     func update(properties: [Key: AnyObject]) {
         setProperties(properties)
     }
     
+    /// Method to get the values of properties of a NSManagedObject.
+    /// - Parameter properties: An array of type Key, where Key is RawRepresentable.
     func getProperties(properties: [Key]) -> [String: AnyObject] {
         return dictionaryWithValuesForKeys(properties.map { $0.rawValue })
     }
     
+    /// Method to get the values of properties of a NSManagedObject.
+    /// - Parameter properties: An array of type Key, where Key is RawRepresentable.
     func get(properties: [Key]) -> [String: AnyObject] {
         return getProperties(properties)
     }
 }
 
+/*
+ Extension methods for creating NSManagedObject type that conforms to KeyCodeable.
+ */
 public extension KeyCodeable where Self: NSManagedObject, Key: Hashable, Key.RawValue == String {
+    /// Creates a new instance of type Self with default properties values.
+    /// - Parameter properties: A dictionary of type [Key: AnyObject], where Key is RawRepresentable.
+    /// - Returns: A new instance of object type Self.
     static func create(properties: [Key: AnyObject]) -> Self {
         return NSManagedObjectContext.defaultContext().create(self, properties: properties)
     }
     
+    /// Creates new instances of type Self with default properties values.
+    /// - Parameter properties: A comma separated list of dictionaries of type [Key: AnyObject], where Key is RawRepresentable.
+    ///   Each dictionary for each instances of objects created.
+    /// - Returns: An array of new instance of objects type Self.
     static func bulkCreate(properties: [Key: AnyObject]...) -> [Self] {
         return properties.map { NSManagedObjectContext.defaultContext().create(self, properties: $0) }
     }
