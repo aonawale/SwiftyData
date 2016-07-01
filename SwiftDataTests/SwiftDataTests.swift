@@ -147,10 +147,10 @@ class SwiftDataTests: XCTestCase {
     func testQueryObjects() {
         _ = Person.bulkCreate([.name: "Ayo", .age: 19], [.name: "Ahmed", .age: 29], [.name: "Onawale", .age: 32])
         
-        let lessThan30 = Person.find(where: "age < %@", 30)
+        let lessThan30 = Person.find(where: "age < %@", arguments: 30)
         XCTAssertEqual(lessThan30.count, 2)
-        
-        let ahmeds = Person.find(where: "name == %@ AND age == %@", "Ahmed", 29)
+
+        let ahmeds = Person.find(where: "name == %@ AND age == %@", arguments: "Ahmed", 29)
         XCTAssertEqual(ahmeds.count, 1)
         XCTAssertEqual(ahmeds.first?.name, "Ahmed")
         
@@ -166,44 +166,49 @@ class SwiftDataTests: XCTestCase {
     
     func testSortingObjects() {
         _ = Person.bulkCreate([.name: "Ayo", .age: 19], [.name: "Ahmed", .age: 29], [.name: "Onawale", .age: 32])
-        let sorted1 = Person.find(where: "age > %@", 10, sort: [.name: .ASC, .age: .DESC])
+        let sorted1 = Person.find(where: [:], sort: [.name: .ASC])
         XCTAssertEqual(sorted1.count, 3)
-        XCTAssertEqual(sorted1.first.name, "Ahmed")
-        XCTAssertEqual(sorted1.last.name, "Onawale")
+        XCTAssertEqual(sorted1.first?.name, "Ahmed")
+        XCTAssertEqual(sorted1.last?.name, "Onawale")
         
         let name = NSSortDescriptor(key: "name", ascending: false)
         let age = NSSortDescriptor(key: "age", ascending: true)
-        let sorted2 = Person.find(where: "age > %@", 10, sort: name, age)
-        XCTAssertEqual(sorted1.first.name, "Onawale")
-        XCTAssertEqual(sorted1.last.name, "Ahmed")
+        let sorted2 = Person.find(where: "age > %@", arguments: 10, "ME", sort: [name, age])
+        XCTAssertEqual(sorted2.first?.name, "Onawale")
+        XCTAssertEqual(sorted2.last?.name, "Ahmed")
     }
     
     func testObjectsFetchLimit() {
         _ = Person.bulkCreate([.name: "Ayo", .age: 19], [.name: "Ahmed", .age: 29], [.name: "Onawale", .age: 32])
-        let justTwo = Person.find(where: "age > %@", 10, limit: 2)
+        let justTwo = Person.find(where: "age > %@", arguments: 10, limit: 2)
         XCTAssertEqual(justTwo.count, 2)
     }
     
     func testObjectsFetchOffset() {
         _ = Person.bulkCreate([.name: "Ayo", .age: 19], [.name: "Ahmed", .age: 29], [.name: "Onawale", .age: 32])
-        let skipTwo = Person.find(where: "age > %@", 10, skip: 2)
+        Person.save() // If context is not saved, the fetchOffset property of NSFetchRequest is ignored
+        let skipTwo = Person.find(where: "age > %@", arguments: 10, skip: 2)
         XCTAssertEqual(skipTwo.count, 1)
     }
     
     func testObjectsBatchSize() {
         _ = Person.bulkCreate([.name: "Ayo", .age: 19], [.name: "Ahmed", .age: 29], [.name: "Onawale", .age: 32])
-        let batch = Person.find(where: "age > %@", 10, batchSize: 2)
+        let batch = Person.find(where: "age > %@", arguments: 10, batchSize: 2)
         XCTAssertEqual(batch.count, 3)
     }
     
     func testFindOneObject() {
         _ = Person.bulkCreate([.name: "Ayo", .age: 19], [.name: "Ahmed", .age: 29], [.name: "Onawale", .age: 32])
         let ahmed = Person.findOne(where: [.name: "Ahmed"])
-        XCTAssertEqual(ahmed.name, "Ahmed")
-        XCTAssertEqual(ahmed.age, 29)
+        XCTAssertEqual(ahmed?.name, "Ahmed")
+        XCTAssertEqual(ahmed?.age, 29)
         
-        let ayo = Person.findOne(where: "age < %@", 20)
-        XCTAssertEqual(ayo.name, "Ayo")
-        XCTAssertEqual(ayo.age, 19)
+        let ayo = Person.findOne(where: "age < %@", arguments: 20)
+        XCTAssertEqual(ayo?.name, "Ayo")
+        XCTAssertEqual(ayo?.age, 19)
+        
+        let predicate = NSPredicate(format: "age > 18")
+        let someone = Person.findOne(where: predicate)
+        XCTAssertNotNil(someone)
     }
 }

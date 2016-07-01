@@ -65,44 +65,103 @@ public extension ManagedObjectType where Self: NSManagedObject {
     /// Method to find and return an object of type Self associated
     /// with the provided NSManagedObjectID paramater.
     /// - Parameter id: The object NSManagedObjectID property.
-    /// - Returns: An object of type Self or nil if no object with that NSManagedObjectID exist
+    /// - Returns: An object of type `Self` or `nil` if no object with that NSManagedObjectID exist
     static func findById(id: NSManagedObjectID) -> Self? {
         return NSManagedObjectContext.defaultContext().findById(self, id: id)
     }
     
     /// Method to find and return an object of type Self with the object's
     /// NSManagedObjectID URIRepresentation property
-    /// - Parameter id: A NSURL. The object NSManagedObjectID.URIRepresentation() property.
-    /// - Returns: An object of type Self or nil if no object with that NSURL exist.
+    /// - Parameter id: A `NSURL`. The object `NSManagedObjectID.URIRepresentation()` property.
+    /// - Returns: An object of type `Self` or `nil` if no object with that NSURL exist.
     static func findByNSURL(url: NSURL) -> Self? {
         return NSManagedObjectContext.defaultContext().findByNSURL(self, url: url)
     }
 }
 
 /*
- Extension methods for querying NSManagedObject
+ Extension methods for finding one NSManagedObject.
  */
-public extension ManagedObjectType where Self: NSManagedObject {
-    /// This method finds and return all objects of type Self
+extension ManagedObjectType where Self: NSManagedObject {
+    /// This method finds and return the first found object of type `Self`
     /// matching the specified format string.
+    /// This method applies `fetchLimit = 1` to the NSFetchRequest used.
     /// - Parameters:
     ///   - where: The format string for the new predicate.
-    ///   - argList: The arguments to substitute into predicate format Values are
+    ///   - arguments: The arguments to substitute into predicate format Values are
     ///     substituted into where format string in the order they appear in the argument list.
-    /// - Returns: An array of objects of type Self.
-    static func find(where where: AnyObject, _ argList: AnyObject...) -> [Self] {
-        return NSManagedObjectContext.defaultContext().find(self, where: `where`, argList)
+    /// - Returns: An optional object of type `Self`.
+    static func findOne(where where: AnyObject, arguments: AnyObject...) -> Self? {
+        return NSManagedObjectContext.defaultContext().findOne(self, where: `where`, arguments: arguments)
     }
 }
 
-public extension ManagedObjectType where Self: NSManagedObject, Self: KeyCodeable, Self.Key: Hashable {
+public extension ManagedObjectType where Self: NSManagedObject, Self: KeyCodeable, Self.Key: Hashable, Self.Key.RawValue == String {
+    /// This method finds and return the first found object of type `Self`
+    /// matching the specified dictionary Key and Value.
+    /// This method applies `fetchLimit = 1` to the NSFetchRequest used.
+    /// - Parameters:
+    ///   - where: A dictionary specifying they keys and value to find.
+    /// - Returns: An optional object of type `Self`.
+    static func findOne(where where: [Key: AnyObject]) -> Self? {
+        return NSManagedObjectContext.defaultContext().findOne(self, where: `where`)
+    }
+}
+
+/*
+ Extension methods for querying NSManagedObject.
+ */
+public extension ManagedObjectType where Self: NSManagedObject {
+    /// This method finds and return all objects of type `Self`
+    /// matching the specified format string.
+    /// - Parameters:
+    ///   - where: The format string for the new predicate.
+    ///   - arguments: The arguments to substitute into predicate format. Values are substituted
+    ///     into where format string in the order they appear in the argument list.
+    ///   - limit: The fetch limit specifies the maximum number of objects that a request
+    ///     should return when executed. The default value is 0.
+    ///   - skip: This setting allows you to specify an offset at which rows will begin being returned.
+    ///     Effectively, the request will skip over the specified number of matching entries.
+    ///     **Note: If context is not saved, the fetchOffset property of NSFetchRequest is ignored.**
+    ///   - batchSize:  The collection of objects returned when the fetch is executed is broken into batches.
+    ///     When the fetch is executed, the entire request is evaluated and the identities of all matching 
+    ///     objects recorded, but no more than batchSize objects’ data will be fetched from the persistent 
+    ///     store at a time. The array returned from executing the request will be a proxy object that 
+    ///     transparently faults batches on demand. The default value is 0. A batch size
+    ///     of 0 is treated as infinite, which disables the batch faulting behavior.
+    ///   - sort: The sort descriptors specify how the objects returned when the fetch request is issued
+    ///     should be ordered—for example by last name then by first name. The sort descriptors are applied
+    ///     in the order in which they appear in the sortDescriptors array (serially in lowest-array-index-first order).
+    /// - Returns: An array of objects of type `Self`.
+    static func find(where where: AnyObject, arguments: AnyObject...,
+        limit: Int = 0, skip: Int = 0, batchSize: Int = 0, sort: [NSSortDescriptor] = []) -> [Self] {
+        return NSManagedObjectContext.defaultContext()
+            .find(self, where: `where`, arguments: arguments, limit: limit, skip: skip, batchSize: batchSize, sort: sort)
+    }
+}
+
+public extension ManagedObjectType where Self: NSManagedObject, Self: KeyCodeable, Self.Key: Hashable, Self.Key.RawValue == String {
     /// This method finds and return all objects of type Self
     /// matching the specified dictionary Key and Value.
     /// - Parameters:
     ///   - where: A dictionary specifying they keys and value to find.
+    ///   - limit: The fetch limit specifies the maximum number of objects that a request
+    ///     should return when executed. The default value is 0.
+    ///   - skip: This setting allows you to specify an offset at which rows will begin being returned.
+    ///     Effectively, the request will skip over the specified number of matching entries.
+    ///     **Note: If context is not saved, the fetchOffset property of NSFetchRequest is ignored.**
+    ///   - batchSize:  The collection of objects returned when the fetch is executed is broken into batches.
+    ///     When the fetch is executed, the entire request is evaluated and the identities of all matching
+    ///     objects recorded, but no more than batchSize objects’ data will be fetched from the persistent
+    ///     store at a time. The array returned from executing the request will be a proxy object that
+    ///     transparently faults batches on demand. The default value is 0. A batch size
+    ///     of 0 is treated as infinite, which disables the batch faulting behavior.
+    ///   - sort: The sort descriptors specify how the objects returned when the fetch request is issued
+    ///     should be ordered—for example by last name then by first name. The sort descriptors are applied
+    ///     in the order in which they appear in the sortDescriptors array (serially in lowest-array-index-first order).
     /// - Returns: An array of objects of type Self.
-    static func find(where where: [Key: AnyObject]) -> [Self] {
-        return NSManagedObjectContext.defaultContext().find(self, where: `where`)
+    static func find(where where: [Key: AnyObject], limit: Int = 0, skip: Int = 0, batchSize: Int = 0, sort: [Key: Sort] = [:]) -> [Self] {
+        return NSManagedObjectContext.defaultContext().find(self, where: `where`, limit: limit, skip: skip, batchSize: batchSize, sort: sort)
     }
 }
 
