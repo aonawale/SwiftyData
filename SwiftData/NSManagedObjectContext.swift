@@ -30,6 +30,20 @@
 
 import CoreData
 
+public enum Sort {
+    case ASC
+    case DESC
+    
+    var value: Bool {
+        switch self {
+        case .ASC:
+            return true
+        case .DESC:
+            return false
+        }
+    }
+}
+
 public extension NSManagedObjectContext {
     /// This method returns the default NSManagedObjectContext used.
     /// - Returns: The default NSManagedObjectContext used.
@@ -86,18 +100,15 @@ public extension NSManagedObjectContext {
     /// - Parameter entity: The type of object to create. // e.g: NSManagedObject.self
     /// - Returns: An array of objects of type entity
     public func findAll<T: NSManagedObject where T: ManagedObjectType>(entity: T.Type) -> [T] {
-        let fetchRequest = NSFetchRequest(entityName: entity.entityName)
-        return fetchEntities(T.self, fetchRequest: fetchRequest)
+        return find(entity, where: nil)
     }
     
-    private func objectWithID<T: NSManagedObject where T: ManagedObjectType>(id: NSManagedObjectID) -> T? {
+    private func objectWithID<T: NSManagedObject where T: ManagedObjectType>(entity: T.Type, id: NSManagedObjectID) -> T? {
         let object = objectWithID(id)
         if object.fault {
             return object as? T
         }
-        let fetchRequest = NSFetchRequest(entityName: T.entityName)
-        fetchRequest.predicate = NSPredicate(format: "SELF == %@", object)
-        return fetchEntities(T.self, fetchRequest: fetchRequest).first
+        return findOne(entity, where: NSPredicate(format: "SELF == %@", object))
     }
     
     /// Method to find and return an object of type entity associated
@@ -107,7 +118,7 @@ public extension NSManagedObjectContext {
     /// - Returns: An object of type entity or nil if no object with that NSURL exist.
     public func findByNSURL<T: NSManagedObject where T: ManagedObjectType>(entity: T.Type, url: NSURL) -> T? {
         guard let managedObjectID = persistentStoreCoordinator?.managedObjectIDForURIRepresentation(url) else { return nil }
-        return objectWithID(managedObjectID)
+        return objectWithID(entity, id: managedObjectID)
     }
     
     /// Method to find and return an object of type entity associated
@@ -116,25 +127,24 @@ public extension NSManagedObjectContext {
     /// - Parameter id: The object NSManagedObjectID property.
     /// - Returns: An object of type entity or nil if no object with that NSManagedObjectID exist.
     public func findById<T: NSManagedObject where T: ManagedObjectType>(entity: T.Type, id: NSManagedObjectID) -> T? {
-        return objectWithID(id)
+        return objectWithID(entity, id: id)
     }
 }
 
 /*
- Extension methods for querying NSManagedObject.
+ Extension methods for finding one NSManagedObject.
  */
 public extension NSManagedObjectContext {
-    /// This method finds and return all objects of type entity
-    /// matching the specified dictionary Key and Value.
+    /// This method finds and return the first found object of type Self
+    /// matching the specified format string.
+    /// This method applies LIMIT 1 to the NSFetchRequest used.
     /// - Parameters:
     ///   - entity: The type of object to find. // e.g: NSManagedObject.self
-    ///   - where: A dictionary specifying they keys and value to find.
-    /// - Returns: An array of objects of type entity.
-    public func find<T: NSManagedObject where T: ManagedObjectType, T: KeyCodeable>
-        (entity: T.Type, where: [T.Key: AnyObject]) -> [T] {
-        let fetchRequest = NSFetchRequest(entityName: entity.entityName)
-        fetchRequest.predicate = predicateFor(entity, condition: `where`)
-        return fetchEntities(entity, fetchRequest: fetchRequest)
+    ///   - where: The format string for the new predicate.
+    /// - Returns: An optional object of type Self.
+    public func findOne<T: NSManagedObject where T: ManagedObjectType, T: KeyCodeable, T.Key.RawValue == String>
+        (entity: T.Type, where: [T.Key: AnyObject]) -> T? {
+        return find(entity, where: `where`, limit: 1).first
     }
     
     /// This method finds and return all objects of type entity
@@ -142,31 +152,100 @@ public extension NSManagedObjectContext {
     /// - Parameters:
     ///   - entity: The type of object to find. // e.g: NSManagedObject.self
     ///   - where: The format string for the new predicate.
-    ///   - argList: The arguments to substitute into predicate format Values are
+    ///   - arguments: The arguments to substitute into predicate format Values are
     ///     substituted into where format string in the order they appear in the argument list.
     /// - Returns: An array of objects of type entity.
+    public func findOne<T: NSManagedObject where T: ManagedObjectType>
+        (entity: T.Type, where: AnyObject, arguments: AnyObject...) -> T? {
+        let args = arguments.first as? [AnyObject] ?? arguments
+        return find(entity, where: `where`, arguments: args).first
+    }
+}
+
+/*
+ Extension methods for querying NSManagedObject.
+ */
+public extension NSManagedObjectContext {
+    /// This method finds and return all objects of type Self
+    /// matching the specified dictionary Key and Value.
+    /// - Parameters:
+    ///   - entity: The type of object to find. // e.g: NSManagedObject.self
+    ///   - where: A dictionary specifying they keys and value to find.
+    ///   - limit: The fetch limit specifies the maximum number of objects that a request
+    ///     should return when executed. The default value is 0.
+    ///   - skip: This setting allows you to specify an offset at which rows will begin being returned.
+    ///     Effectively, the request will skip over the specified number of matching entries.
+    ///     **Note: If context is not saved, the fetchOffset property of NSFetchRequest is ignored.**
+    ///   - batchSize:  The collection of objects returned when the fetch is executed is broken into batches.
+    ///     When the fetch is executed, the entire request is evaluated and the identities of all matching
+    ///     objects recorded, but no more than batchSize objects’ data will be fetched from the persistent
+    ///     store at a time. The array returned from executing the request will be a proxy object that
+    ///     transparently faults batches on demand. The default value is 0. A batch size
+    ///     of 0 is treated as infinite, which disables the batch faulting behavior.
+    ///   - sort: The sort descriptors specify how the objects returned when the fetch request is issued
+    ///     should be ordered—for example by last name then by first name. The sort descriptors are applied
+    ///     in the order in which they appear in the sortDescriptors array (serially in lowest-array-index-first order).
+    /// - Returns: An array of objects of type Self.
+    public func find<T: NSManagedObject where T: ManagedObjectType, T: KeyCodeable, T.Key.RawValue == String>
+        (entity: T.Type, where: [T.Key: AnyObject], limit: Int = 0, skip: Int = 0, batchSize: Int = 0, sort: [T.Key: Sort]? = nil) -> [T] {
+        let sortDescriptors = sort == nil ? nil : sortDescriptorFor(entity, sort: sort!)
+        let predicate = predicateFor(entity, condition: `where`)
+        return find(entity, where: predicate, limit: limit, skip: skip, batchSize: batchSize, sort: sortDescriptors)
+    }
+    
+    /// This method finds and return all objects of type Self
+    /// matching the specified format string.
+    /// - Parameters:
+    ///   - entity: The type of object to find. // e.g: NSManagedObject.self
+    ///   - where: The format string for the new predicate.
+    ///   - arguments: The arguments to substitute into predicate format. Values are substituted
+    ///     into where format string in the order they appear in the argument list.
+    ///   - limit: The fetch limit specifies the maximum number of objects that a request
+    ///     should return when executed. The default value is 0.
+    ///   - skip: This setting allows you to specify an offset at which rows will begin being returned.
+    ///     Effectively, the request will skip over the specified number of matching entries.
+    ///     **Note: If context is not saved, the fetchOffset property of NSFetchRequest is ignored.**
+    ///   - batchSize:  The collection of objects returned when the fetch is executed is broken into batches.
+    ///     When the fetch is executed, the entire request is evaluated and the identities of all matching
+    ///     objects recorded, but no more than batchSize objects’ data will be fetched from the persistent
+    ///     store at a time. The array returned from executing the request will be a proxy object that
+    ///     transparently faults batches on demand. The default value is 0. A batch size
+    ///     of 0 is treated as infinite, which disables the batch faulting behavior.
+    ///   - sort: The sort descriptors specify how the objects returned when the fetch request is issued
+    ///     should be ordered—for example by last name then by first name. The sort descriptors are applied
+    ///     in the order in which they appear in the sortDescriptors array (serially in lowest-array-index-first order).
+    /// - Returns: An array of objects of type Self.
     public func find<T: NSManagedObject where T: ManagedObjectType>
-        (entity: T.Type, where: AnyObject, _ argList: AnyObject...) -> [T] {
-        let args = argList.first as? [AnyObject] ?? argList
+        (entity: T.Type, where: AnyObject?, arguments: AnyObject..., limit: Int = 0, skip: Int = 0, batchSize: Int = 0, sort: [NSSortDescriptor]? = nil) -> [T] {
+        let args = arguments.first as? [AnyObject] ?? arguments
         let fetchRequest = NSFetchRequest(entityName: entity.entityName)
+        fetchRequest.fetchLimit = limit
+        fetchRequest.fetchOffset = skip
+        fetchRequest.fetchBatchSize = batchSize
+        fetchRequest.sortDescriptors = sort
         fetchRequest.predicate = predicateFor(entity, condition: `where`, args: args)
         return fetchEntities(entity, fetchRequest: fetchRequest)
     }
     
-    private func predicateFor<T>(entity: T.Type, condition: AnyObject, args: [AnyObject]) -> NSPredicate {
+    private func predicateFor<T>(entity: T.Type, condition: AnyObject?, args: [AnyObject]) -> NSPredicate? {
         switch condition {
         case let condition as NSPredicate:
             return condition
         case let condition as String:
             return NSPredicate(format: condition, argumentArray: args)
         default:
-            return NSPredicate()
+            return nil
         }
     }
     
     private func predicateFor<T where T: KeyCodeable, T.Key: Hashable>
-        (entity: T.Type, condition: [T.Key: AnyObject]) -> NSPredicate {
-        return entity.predicateFromDictionary(condition)
+        (entity: T.Type, condition: [T.Key: AnyObject]) -> NSPredicate? {
+        return condition.isEmpty ? nil : entity.predicateFromDictionary(condition)
+    }
+    
+    private func sortDescriptorFor<T where T: KeyCodeable, T.Key: Hashable, T.Key.RawValue == String>
+        (entity: T.Type, sort: [T.Key: Sort]) -> [NSSortDescriptor]? {
+        return sort.isEmpty ? nil : entity.sortDiscriptorsFromDictionary(sort)
     }
 }
 
