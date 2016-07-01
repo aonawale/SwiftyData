@@ -164,9 +164,41 @@ class SwiftDataTests: XCTestCase {
         XCTAssertEqual(greaterThan18.count, 3)
     }
     
+    func testSortingObjects() {
+        _ = Person.bulkCreate([.name: "Ayo", .age: 19], [.name: "Ahmed", .age: 29], [.name: "Onawale", .age: 32])
+        let sorted1 = Person.find(where: "age > %@", 10, sort: [.name: .ASC, .age: .DESC])
+        XCTAssertEqual(sorted1.count, 3)
+        XCTAssertEqual(sorted1.first.name, "Ahmed")
+        XCTAssertEqual(sorted1.last.name, "Onawale")
+        
+        let name = NSSortDescriptor(key: "name", ascending: false)
+        let age = NSSortDescriptor(key: "age", ascending: true)
+        let sorted2 = Person.find(where: "age > %@", 10, sort: name, age)
+        XCTAssertEqual(sorted1.first.name, "Onawale")
+        XCTAssertEqual(sorted1.last.name, "Ahmed")
+    }
+    
+    func testObjectsFetchLimit() {
+        _ = Person.bulkCreate([.name: "Ayo", .age: 19], [.name: "Ahmed", .age: 29], [.name: "Onawale", .age: 32])
+        let justTwo = Person.find(where: "age > %@", 10, limit: 2)
+        XCTAssertEqual(justTwo.count, 2)
+    }
+    
+    func testObjectsFetchOffset() {
+        _ = Person.bulkCreate([.name: "Ayo", .age: 19], [.name: "Ahmed", .age: 29], [.name: "Onawale", .age: 32])
+        let skipTwo = Person.find(where: "age > %@", 10, skip: 2)
+        XCTAssertEqual(skipTwo.count, 1)
+    }
+    
+    func testObjectsBatchSize() {
+        _ = Person.bulkCreate([.name: "Ayo", .age: 19], [.name: "Ahmed", .age: 29], [.name: "Onawale", .age: 32])
+        let batch = Person.find(where: "age > %@", 10, batchSize: 2)
+        XCTAssertEqual(batch.count, 3)
+    }
+    
     func testFindOneObject() {
         _ = Person.bulkCreate([.name: "Ayo", .age: 19], [.name: "Ahmed", .age: 29], [.name: "Onawale", .age: 32])
-        let ahmed = Person.findOne(where: "name == %@", "Ahmed")
+        let ahmed = Person.findOne(where: [.name: "Ahmed"])
         XCTAssertEqual(ahmed.name, "Ahmed")
         XCTAssertEqual(ahmed.age, 29)
         
