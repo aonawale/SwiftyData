@@ -163,4 +163,15 @@ class SwiftDataTests: XCTestCase {
         let greaterThan18 = Person.find(where: predicate)
         XCTAssertEqual(greaterThan18.count, 3)
     }
+    
+    func testFindOneObject() {
+        _ = Person.bulkCreate([.name: "Ayo", .age: 19], [.name: "Ahmed", .age: 29], [.name: "Onawale", .age: 32])
+        let ahmed = Person.findOne(where: "name == %@", "Ahmed")
+        XCTAssertEqual(ahmed.name, "Ahmed")
+        XCTAssertEqual(ahmed.age, 29)
+        
+        let ayo = Person.findOne(where: "age < %@", 20)
+        XCTAssertEqual(ayo.name, "Ayo")
+        XCTAssertEqual(ayo.age, 19)
+    }
 }
