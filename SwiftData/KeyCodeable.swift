@@ -109,3 +109,15 @@ public extension KeyCodeable where Key: Hashable {
         return NSPredicate(format: format, argumentArray: args)
     }
 }
+
+/*
+ Extension methods for creating NSSortDescriptors from Dictionary.
+ */
+public extension KeyCodeable where Key: Hashable, Key.RawValue == String {
+    /// Construct an array NSSortDescriptor from a Dictionary.
+    /// - Parameter dictionary: A Dictionary of type [Key: Sort].
+    /// - Returns: An array of NSSortDescriptor.
+    static func sortDiscriptorsFromDictionary(dictionary: [Key: Sort]) -> [NSSortDescriptor] {
+        return dictionary.map { NSSortDescriptor(key: $0.0.rawValue, ascending: $0.1.value) }
+    }
+}
