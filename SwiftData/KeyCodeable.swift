@@ -44,7 +44,7 @@ public protocol KeyCodeable {
 public extension KeyCodeable where Self: NSManagedObject, Key: Hashable, Key.RawValue == String {
     /// Method to update the properties of a NSManagedObject.
     /// - Parameter properties: A dictionary of type [Key: AnyObject], where Key is RawRepresentable.
-    func setProperties(properties: [Key: AnyObject]) {
+    func set(properties: [Key: AnyObject]) {
         let dictionary = properties.reduce([:]) { (previous, next) -> [String: AnyObject] in
             var previous = previous
             previous[next.0.rawValue] = next.1
@@ -53,22 +53,10 @@ public extension KeyCodeable where Self: NSManagedObject, Key: Hashable, Key.Raw
         setValuesForKeysWithDictionary(dictionary)
     }
     
-    /// Method to update the properties of a NSManagedObject.
-    /// - Parameter properties: A dictionary of type [Key: AnyObject], where Key is RawRepresentable.
-    func update(properties: [Key: AnyObject]) {
-        setProperties(properties)
-    }
-    
-    /// Method to get the values of properties of a NSManagedObject.
-    /// - Parameter properties: An array of type Key, where Key is RawRepresentable.
-    func getProperties(properties: [Key]) -> [String: AnyObject] {
-        return dictionaryWithValuesForKeys(properties.map { $0.rawValue })
-    }
-    
     /// Method to get the values of properties of a NSManagedObject.
     /// - Parameter properties: An array of type Key, where Key is RawRepresentable.
     func get(properties: [Key]) -> [String: AnyObject] {
-        return getProperties(properties)
+        return dictionaryWithValuesForKeys(properties.map { $0.rawValue })
     }
 }
 

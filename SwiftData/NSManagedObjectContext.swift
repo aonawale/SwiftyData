@@ -73,7 +73,7 @@ public extension NSManagedObjectContext {
     /// - Returns: A new instance of object type entity.
     public func create<T: NSManagedObject where T: ManagedObjectType, T: KeyCodeable, T.Key.RawValue == String>(entity: T.Type, properties: [T.Key: AnyObject]) -> T {
         let object = create(T)
-        object.setProperties(properties)
+        object.set(properties)
         return object
     }
 }
@@ -158,7 +158,7 @@ public extension NSManagedObjectContext {
     public func findOne<T: NSManagedObject where T: ManagedObjectType>
         (entity: T.Type, where: AnyObject, arguments: AnyObject...) -> T? {
         let args = arguments.first as? [AnyObject] ?? arguments
-        return find(entity, where: `where`, arguments: args).first
+        return find(entity, where: `where`, arguments: args, limit: 1).first
     }
 }
 
