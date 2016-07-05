@@ -1,6 +1,6 @@
 //
 //  NSManagedObjectContext.swift
-//  SwiftData
+//  SwiftyData
 //
 //  Created by Ahmed Onawale on 6/28/16.
 //  Copyright © 2016 Ahmed Onawale. All rights reserved.
@@ -48,7 +48,7 @@ public extension NSManagedObjectContext {
     /// This method returns the default NSManagedObjectContext used.
     /// - Returns: The default NSManagedObjectContext used.
     public static func defaultContext() -> NSManagedObjectContext {
-        return SwiftData.sharedInstance.managedObjectContext
+        return SwiftyData.sharedInstance.managedObjectContext
     }
 }
 

@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		85110E601D232E4800BC116D /* SwiftData.h in Headers */ = {isa = PBXBuildFile; fileRef = 85110E5F1D232E4800BC116D /* SwiftData.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		85110E671D232E4800BC116D /* SwiftData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85110E5C1D232E4800BC116D /* SwiftData.framework */; };
-		85110E6C1D232E4800BC116D /* SwiftDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85110E6B1D232E4800BC116D /* SwiftDataTests.swift */; };
+		85110E601D232E4800BC116D /* SwiftyData.h in Headers */ = {isa = PBXBuildFile; fileRef = 85110E5F1D232E4800BC116D /* SwiftyData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		85110E671D232E4800BC116D /* SwiftyData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 85110E5C1D232E4800BC116D /* SwiftyData.framework */; };
+		85110E6C1D232E4800BC116D /* SwiftyDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85110E6B1D232E4800BC116D /* SwiftyDataTests.swift */; };
 		85110EB51D23369900BC116D /* ManagedObjectType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85110EB41D23369900BC116D /* ManagedObjectType.swift */; };
 		85110EB81D2336E600BC116D /* NSManagedObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85110EB71D2336E600BC116D /* NSManagedObject.swift */; };
 		85110EBA1D23371D00BC116D /* NSManagedObjectContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85110EB91D23371D00BC116D /* NSManagedObjectContext.swift */; };
 		85110EC01D23454D00BC116D /* KeyCodeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85110EBF1D23454D00BC116D /* KeyCodeable.swift */; };
-		85110ED11D23EF2A00BC116D /* SwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85110ED01D23EF2A00BC116D /* SwiftData.swift */; };
-		85110F0E1D24408300BC116D /* SwiftDataTests.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 85110F0C1D24408300BC116D /* SwiftDataTests.xcdatamodeld */; };
+		85110ED11D23EF2A00BC116D /* SwiftyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85110ED01D23EF2A00BC116D /* SwiftyData.swift */; };
+		85110F0E1D24408300BC116D /* SwiftyDataTests.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 85110F0C1D24408300BC116D /* SwiftyDataTests.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,18 +29,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		85110E5C1D232E4800BC116D /* SwiftData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		85110E5F1D232E4800BC116D /* SwiftData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftData.h; sourceTree = "<group>"; };
+		85110E5C1D232E4800BC116D /* SwiftyData.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyData.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		85110E5F1D232E4800BC116D /* SwiftyData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftyData.h; sourceTree = "<group>"; };
 		85110E611D232E4800BC116D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		85110E661D232E4800BC116D /* SwiftDataTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftDataTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		85110E6B1D232E4800BC116D /* SwiftDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataTests.swift; sourceTree = "<group>"; };
+		85110E661D232E4800BC116D /* SwiftyDataTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftyDataTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		85110E6B1D232E4800BC116D /* SwiftyDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftyDataTests.swift; sourceTree = "<group>"; };
 		85110E6D1D232E4800BC116D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		85110EB41D23369900BC116D /* ManagedObjectType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedObjectType.swift; sourceTree = "<group>"; };
 		85110EB71D2336E600BC116D /* NSManagedObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSManagedObject.swift; sourceTree = "<group>"; };
 		85110EB91D23371D00BC116D /* NSManagedObjectContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSManagedObjectContext.swift; sourceTree = "<group>"; };
 		85110EBF1D23454D00BC116D /* KeyCodeable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyCodeable.swift; sourceTree = "<group>"; };
-		85110ED01D23EF2A00BC116D /* SwiftData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftData.swift; sourceTree = "<group>"; };
-		85110F0D1D24408300BC116D /* SwiftDataTests.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SwiftDataTests.xcdatamodel; sourceTree = "<group>"; };
+		85110ED01D23EF2A00BC116D /* SwiftyData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyData.swift; sourceTree = "<group>"; };
+		85110F0D1D24408300BC116D /* SwiftyDataTests.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SwiftyDataTests.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				85110E671D232E4800BC116D /* SwiftData.framework in Frameworks */,
+				85110E671D232E4800BC116D /* SwiftyData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,8 +65,8 @@
 		85110E521D232E4800BC116D = {
 			isa = PBXGroup;
 			children = (
-				85110E5E1D232E4800BC116D /* SwiftData */,
-				85110E6A1D232E4800BC116D /* SwiftDataTests */,
+				85110E5E1D232E4800BC116D /* SwiftyData */,
+				85110E6A1D232E4800BC116D /* SwiftyDataTests */,
 				85110E5D1D232E4800BC116D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -74,32 +74,32 @@
 		85110E5D1D232E4800BC116D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				85110E5C1D232E4800BC116D /* SwiftData.framework */,
-				85110E661D232E4800BC116D /* SwiftDataTests.xctest */,
+				85110E5C1D232E4800BC116D /* SwiftyData.framework */,
+				85110E661D232E4800BC116D /* SwiftyDataTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		85110E5E1D232E4800BC116D /* SwiftData */ = {
+		85110E5E1D232E4800BC116D /* SwiftyData */ = {
 			isa = PBXGroup;
 			children = (
 				85110EB61D2336D400BC116D /* Extensions */,
 				85110EB31D23368900BC116D /* Protocols */,
-				85110ED01D23EF2A00BC116D /* SwiftData.swift */,
-				85110E5F1D232E4800BC116D /* SwiftData.h */,
+				85110ED01D23EF2A00BC116D /* SwiftyData.swift */,
+				85110E5F1D232E4800BC116D /* SwiftyData.h */,
 				85110E611D232E4800BC116D /* Info.plist */,
 			);
-			path = SwiftData;
+			path = SwiftyData;
 			sourceTree = "<group>";
 		};
-		85110E6A1D232E4800BC116D /* SwiftDataTests */ = {
+		85110E6A1D232E4800BC116D /* SwiftyDataTests */ = {
 			isa = PBXGroup;
 			children = (
-				85110E6B1D232E4800BC116D /* SwiftDataTests.swift */,
+				85110E6B1D232E4800BC116D /* SwiftyDataTests.swift */,
 				85110E6D1D232E4800BC116D /* Info.plist */,
-				85110F0C1D24408300BC116D /* SwiftDataTests.xcdatamodeld */,
+				85110F0C1D24408300BC116D /* SwiftyDataTests.xcdatamodeld */,
 			);
-			path = SwiftDataTests;
+			path = SwiftyDataTests;
 			sourceTree = "<group>";
 		};
 		85110EB31D23368900BC116D /* Protocols */ = {
@@ -127,16 +127,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				85110E601D232E4800BC116D /* SwiftData.h in Headers */,
+				85110E601D232E4800BC116D /* SwiftyData.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		85110E5B1D232E4800BC116D /* SwiftData */ = {
+		85110E5B1D232E4800BC116D /* SwiftyData */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 85110E701D232E4800BC116D /* Build configuration list for PBXNativeTarget "SwiftData" */;
+			buildConfigurationList = 85110E701D232E4800BC116D /* Build configuration list for PBXNativeTarget "SwiftyData" */;
 			buildPhases = (
 				85110E571D232E4800BC116D /* Sources */,
 				85110E581D232E4800BC116D /* Frameworks */,
@@ -147,14 +147,14 @@
 			);
 			dependencies = (
 			);
-			name = SwiftData;
+			name = SwiftyData;
 			productName = SwiftData;
-			productReference = 85110E5C1D232E4800BC116D /* SwiftData.framework */;
+			productReference = 85110E5C1D232E4800BC116D /* SwiftyData.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		85110E651D232E4800BC116D /* SwiftDataTests */ = {
+		85110E651D232E4800BC116D /* SwiftyDataTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 85110E731D232E4800BC116D /* Build configuration list for PBXNativeTarget "SwiftDataTests" */;
+			buildConfigurationList = 85110E731D232E4800BC116D /* Build configuration list for PBXNativeTarget "SwiftyDataTests" */;
 			buildPhases = (
 				85110E621D232E4800BC116D /* Sources */,
 				85110E631D232E4800BC116D /* Frameworks */,
@@ -165,9 +165,9 @@
 			dependencies = (
 				85110E691D232E4800BC116D /* PBXTargetDependency */,
 			);
-			name = SwiftDataTests;
+			name = SwiftyDataTests;
 			productName = SwiftDataTests;
-			productReference = 85110E661D232E4800BC116D /* SwiftDataTests.xctest */;
+			productReference = 85110E661D232E4800BC116D /* SwiftyDataTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -188,7 +188,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 85110E561D232E4800BC116D /* Build configuration list for PBXProject "SwiftData" */;
+			buildConfigurationList = 85110E561D232E4800BC116D /* Build configuration list for PBXProject "SwiftyData" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -200,8 +200,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				85110E5B1D232E4800BC116D /* SwiftData */,
-				85110E651D232E4800BC116D /* SwiftDataTests */,
+				85110E5B1D232E4800BC116D /* SwiftyData */,
+				85110E651D232E4800BC116D /* SwiftyDataTests */,
 			);
 		};
 /* End PBXProject section */
@@ -232,7 +232,7 @@
 				85110EB51D23369900BC116D /* ManagedObjectType.swift in Sources */,
 				85110EBA1D23371D00BC116D /* NSManagedObjectContext.swift in Sources */,
 				85110EB81D2336E600BC116D /* NSManagedObject.swift in Sources */,
-				85110ED11D23EF2A00BC116D /* SwiftData.swift in Sources */,
+				85110ED11D23EF2A00BC116D /* SwiftyData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,8 +240,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				85110E6C1D232E4800BC116D /* SwiftDataTests.swift in Sources */,
-				85110F0E1D24408300BC116D /* SwiftDataTests.xcdatamodeld in Sources */,
+				85110E6C1D232E4800BC116D /* SwiftyDataTests.swift in Sources */,
+				85110F0E1D24408300BC116D /* SwiftyDataTests.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,7 +250,7 @@
 /* Begin PBXTargetDependency section */
 		85110E691D232E4800BC116D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 85110E5B1D232E4800BC116D /* SwiftData */;
+			target = 85110E5B1D232E4800BC116D /* SwiftyData */;
 			targetProxy = 85110E681D232E4800BC116D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -294,7 +294,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -337,7 +337,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -355,12 +355,12 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = SwiftData/Info.plist;
+				INFOPLIST_FILE = SwiftyData/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ahmedonawale.SwiftData;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ahmedonawale.SwiftyData;
+				PRODUCT_NAME = SwiftyData;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -374,12 +374,12 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = SwiftData/Info.plist;
+				INFOPLIST_FILE = SwiftyData/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ahmedonawale.SwiftData;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ahmedonawale.SwiftyData;
+				PRODUCT_NAME = SwiftyData;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -387,27 +387,27 @@
 		85110E741D232E4800BC116D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = SwiftDataTests/Info.plist;
+				INFOPLIST_FILE = SwiftyDataTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ahmedonawale.SwiftDataTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ahmedonawale.SwiftyDataTests;
+				PRODUCT_NAME = SwiftyDataTests;
 			};
 			name = Debug;
 		};
 		85110E751D232E4800BC116D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = SwiftDataTests/Info.plist;
+				INFOPLIST_FILE = SwiftyDataTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ahmedonawale.SwiftDataTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ahmedonawale.SwiftyDataTests;
+				PRODUCT_NAME = SwiftyDataTests;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		85110E561D232E4800BC116D /* Build configuration list for PBXProject "SwiftData" */ = {
+		85110E561D232E4800BC116D /* Build configuration list for PBXProject "SwiftyData" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				85110E6E1D232E4800BC116D /* Debug */,
@@ -416,7 +416,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		85110E701D232E4800BC116D /* Build configuration list for PBXNativeTarget "SwiftData" */ = {
+		85110E701D232E4800BC116D /* Build configuration list for PBXNativeTarget "SwiftyData" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				85110E711D232E4800BC116D /* Debug */,
@@ -425,7 +425,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		85110E731D232E4800BC116D /* Build configuration list for PBXNativeTarget "SwiftDataTests" */ = {
+		85110E731D232E4800BC116D /* Build configuration list for PBXNativeTarget "SwiftyDataTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				85110E741D232E4800BC116D /* Debug */,
@@ -437,13 +437,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		85110F0C1D24408300BC116D /* SwiftDataTests.xcdatamodeld */ = {
+		85110F0C1D24408300BC116D /* SwiftyDataTests.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				85110F0D1D24408300BC116D /* SwiftDataTests.xcdatamodel */,
+				85110F0D1D24408300BC116D /* SwiftyDataTests.xcdatamodel */,
 			);
-			currentVersion = 85110F0D1D24408300BC116D /* SwiftDataTests.xcdatamodel */;
-			path = SwiftDataTests.xcdatamodeld;
+			currentVersion = 85110F0D1D24408300BC116D /* SwiftyDataTests.xcdatamodel */;
+			path = SwiftyDataTests.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

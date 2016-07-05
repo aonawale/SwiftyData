@@ -1,6 +1,6 @@
 //
-//  SwiftDataTests.swift
-//  SwiftDataTests
+//  SwiftyDataTests.swift
+//  SwiftyDataTests
 //
 //  Created by Ahmed Onawale on 6/28/16.
 //  Copyright © 2016 Ahmed Onawale. All rights reserved.
@@ -30,7 +30,7 @@
 
 import XCTest
 import CoreData
-@testable import SwiftData
+@testable import SwiftyData
 
 class Person: NSManagedObject {
     @NSManaged var name: String
@@ -44,7 +44,7 @@ extension Person: KeyCodeable {
     }
 }
 
-class SwiftDataTests: XCTestCase {
+class SwiftyDataTests: XCTestCase {
     override func setUp() {
         super.setUp()
     }
