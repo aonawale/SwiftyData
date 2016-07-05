@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:SwiftData.xcodeproj">
+      location = "self:/Users/ahmedonawale/Projects/iOS/SwiftyData/SwiftyData.xcodeproj">
    </FileRef>
 </Workspace>

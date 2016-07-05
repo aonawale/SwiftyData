@@ -1,4 +1,4 @@
-# SwiftData
+# SwiftyData
 
 > A Swift Core Data wrapper with nice API for interacting with managed objects and managed object contexts.
 
@@ -34,7 +34,7 @@
 $ gem install cocoapods
 ```
 
-To integrate SwiftData into your Xcode project using CocoaPods, specify it in your `Podfile`:
+To integrate SwiftyData into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
@@ -42,7 +42,7 @@ platform :ios, '9.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'SwiftData.swift'
+    pod 'SwiftyData.swift'
 end
 ```
 
@@ -52,7 +52,7 @@ Then, run the following command:
 $ pod install
 ```
 
-Then add `import SwiftData` to the top of the files using SwiftData.
+Then add `import SwiftyData` to the top of the files using SwiftyData.
 
 ### Carthage
 
@@ -65,25 +65,25 @@ $ brew update
 $ brew install carthage
 ```
 
-To integrate SwiftData into your Xcode project using Carthage, specify it in your `Cartfile`:
+To integrate SwiftyData into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
-github "aonawale/SwiftData" >= 0.0.1
+github "aonawale/SwiftyData" >= 0.0.1
 ```
 
-Run `carthage update` to build the framework and drag the built `SwiftData.framework` into your Xcode project.
+Run `carthage update` to build the framework and drag the built `SwiftyData.framework` into your Xcode project.
 
 ### Manually
 
-If you prefer not to use either of the aforementioned dependency managers, you can integrate SwiftData into your project manually.
+If you prefer not to use either of the aforementioned dependency managers, you can integrate SwiftyData into your project manually.
 
 
 ## Getting started
 
-1. Import SwiftData at the of the files using SwiftData.
+1. Import SwiftyData at the of the files using SwiftyData.
 
 ```swift
-import SwiftData
+import SwiftyData
 
 class Person: NSManagedObject {
     @NSManaged var name: String
@@ -264,4 +264,4 @@ iOS 8 or later.
 
 ## License
 
-SwiftData is available under the MIT license. See the LICENSE.md file for more information.
+SwiftyData is available under the MIT license. See the LICENSE.md file for more information.

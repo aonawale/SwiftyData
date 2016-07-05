@@ -1,6 +1,6 @@
 //
 //  KeyCodeable.swift
-//  SwiftData
+//  SwiftyData
 //
 //  Created by Ahmed Onawale on 6/29/16.
 //  Copyright © 2016 Ahmed Onawale. All rights reserved.

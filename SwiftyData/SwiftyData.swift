@@ -1,6 +1,6 @@
 //
-//  SwiftData.swift
-//  SwiftData
+//  SwiftyData.swift
+//  SwiftyData
 //
 //  Created by Ahmed Onawale on 6/29/16.
 //  Copyright © 2016 Ahmed Onawale. All rights reserved.
@@ -30,15 +30,15 @@
 
 import CoreData
 
-public class SwiftData {
+public class SwiftyData {
     
     private init() {}
     
-    public static let sharedInstance = SwiftData()
+    public static let sharedInstance = SwiftyData()
     
     private var bundle: NSBundle {
         if let _ = NSClassFromString("XCTest") {
-            return NSBundle(identifier: "com.ahmedonawale.SwiftDataTests")!
+            return NSBundle(identifier: "com.ahmedonawale.SwiftyDataTests")!
         }
         return NSBundle.mainBundle()
     }

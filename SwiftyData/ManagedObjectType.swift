@@ -1,6 +1,6 @@
 //
 //  ManagedObjectType.swift
-//  SwiftData
+//  SwiftyData
 //
 //  Created by Ahmed Onawale on 6/28/16.
 //  Copyright © 2016 Ahmed Onawale. All rights reserved.
