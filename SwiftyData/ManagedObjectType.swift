@@ -197,11 +197,35 @@ public extension ManagedObjectType where Self: NSManagedObject, Self: KeyCodeabl
 }
 
 /*
+ Extension methods for counting NSManagedObject.
+ */
+public extension ManagedObjectType where Self: NSManagedObject, Self: KeyCodeable, Self.Key: Hashable {
+    /// Returns the number of objects that matches the count criteria.
+    /// - Parameter where: A dictionary specifying they keys and value to count.
+    /// - Returns: The number of objects that matched the where parameter.
+    static func count(where where: [Key: AnyObject]) -> Int {
+        return NSManagedObjectContext.defaultContext().count(self, where: `where`)
+    }
+}
+
+public extension ManagedObjectType where Self: NSManagedObject {
+    /// Returns the number of objects that matches the count criteria.
+    /// - Parameter where: The format string for the new predicate.
+    /// - Parameter arguments: The arguments to substitute into predicate format. Values are substituted
+    ///     into where format string in the order they appear in the argument list.
+    /// - Returns: The number of objects that matched the where parameter.
+    static func count(where where: AnyObject? = nil, arguments: AnyObject...) -> Int {
+        return NSManagedObjectContext.defaultContext().count(self, where: `where`, arguments: arguments)
+    }
+}
+
+/*
  Extension methods for upserting NSManagedObject.
  */
 public extension ManagedObjectType where Self: NSManagedObject, Self: KeyCodeable, Self.Key: Hashable, Self.Key.RawValue == String {
     /// Method to create a new instance of object type `Self` 
     /// if an object with provided properties doesn't exist already.
+    /// - Parameter properties: A dictionary of type [Key: AnyObject].
     /// - Returns: An object of type Self.
     static func upsert(properties: [Key: AnyObject]) -> Self {
         return NSManagedObjectContext.defaultContext().upsert(self, properties: properties)

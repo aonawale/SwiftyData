@@ -243,4 +243,14 @@ class SwiftyDataTests: XCTestCase {
         _ = Person.upsert([.name: "Onawale", .age: 32])
         XCTAssertEqual(Person.findAll().count, 3)
     }
+    
+    func testAggregation()  {
+        _ = Person.bulkCreate([.name: "Ayo", .age: 19], [.name: "Ahmed", .age: 29], [.name: "Onawale", .age: 32])
+        XCTAssertEqual(Person.count(), 3)
+        XCTAssertEqual(Person.count(where: "age < 30"), 2)
+        XCTAssertEqual(Person.count(where: [.name: "Onawale"]), 1)
+        
+        let predicate = NSPredicate(format: "name CONTAINS[cd] %@", "e")
+        XCTAssertEqual(Person.count(where: predicate), 2)
+    }
 }

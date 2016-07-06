@@ -227,6 +227,34 @@ public extension NSManagedObjectContext {
 }
 
 /*
+ Extension methods for counting NSManagedObject.
+ */
+public extension NSManagedObjectContext {
+    /// Returns the number of objects that matches the count criteria.
+    /// - Parameter entity: The type of object to find. // e.g: NSManagedObject.self
+    /// - Parameter where: A dictionary specifying they keys and value to count.
+    /// - Returns: The number of objects that matched the where parameter.
+    public func count<T: NSManagedObject where T: ManagedObjectType, T: KeyCodeable>
+        (entity: T.Type, where: [T.Key: AnyObject]) -> Int {
+        return count(entity, where: predicateFor(entity, condition: `where`))
+    }
+    
+    /// Returns the number of objects that matches the count criteria.
+    /// - Parameter entity: The type of object to find. // e.g: NSManagedObject.self
+    /// - Parameter where: The format string for the new predicate.
+    /// - Parameter arguments: The arguments to substitute into predicate format. Values are substituted
+    ///     into where format string in the order they appear in the argument list.
+    /// - Returns: The number of objects that matched the where parameter.
+    public func count<T: NSManagedObject where T: ManagedObjectType>
+        (entity: T.Type, where: AnyObject? = nil, arguments: AnyObject...) -> Int {
+        let args = arguments.first as? [AnyObject] ?? arguments
+        let fetchRequest = NSFetchRequest(entityName: entity.entityName)
+        fetchRequest.predicate = predicateFor(entity, condition: `where`, args: args)
+        return countForFetchRequest(fetchRequest, error: nil)
+    }
+}
+
+/*
  Extension methods for querying NSManagedObject.
  */
 public extension NSManagedObjectContext {
