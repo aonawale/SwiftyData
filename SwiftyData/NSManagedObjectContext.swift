@@ -79,7 +79,24 @@ public extension NSManagedObjectContext {
 }
 
 /*
- Extension methods for creating finding NSManagedObject.
+ Extension methods for upserting NSManagedObject.
+ */
+public extension NSManagedObjectContext {
+    /// Method to create a new instance of object type `Self`
+    /// if an object with provided properties doesn't exist already.
+    /// - Parameter entity: The type of object to create. // e.g: NSManagedObject.self
+    /// - Returns: An object of type Self.
+    public func upsert<T: NSManagedObject where T: ManagedObjectType, T: KeyCodeable, T.Key.RawValue == String>
+        (entity: T.Type, properties: [T.Key: AnyObject]) -> T {
+        guard let object = findOne(entity, where: properties) else {
+            return create(entity, properties: properties)
+        }
+        return object
+    }
+}
+
+/*
+ Extension methods for finding NSManagedObject.
 */
 public extension NSManagedObjectContext {
     private func fetchEntities<T: NSManagedObject where T: ManagedObjectType>(type: T.Type, fetchRequest: NSFetchRequest) -> [T] {

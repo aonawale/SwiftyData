@@ -233,4 +233,14 @@ class SwiftyDataTests: XCTestCase {
         let ahmed = Person.findOne(where: [.name: "ahmed", .age: 29])
         XCTAssertNotNil(ahmed)
     }
+    
+    func testUpsertObject() {
+        _ = Person.bulkCreate([.name: "Ayo", .age: 19], [.name: "Ahmed", .age: 29])
+        
+        _ = Person.upsert([.name: "Ayo", .age: 19])
+        XCTAssertEqual(Person.findAll().count, 2)
+        
+        _ = Person.upsert([.name: "Onawale", .age: 32])
+        XCTAssertEqual(Person.findAll().count, 3)
+    }
 }

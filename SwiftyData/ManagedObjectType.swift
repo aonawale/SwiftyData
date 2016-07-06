@@ -197,6 +197,18 @@ public extension ManagedObjectType where Self: NSManagedObject, Self: KeyCodeabl
 }
 
 /*
+ Extension methods for upserting NSManagedObject.
+ */
+public extension ManagedObjectType where Self: NSManagedObject, Self: KeyCodeable, Self.Key: Hashable, Self.Key.RawValue == String {
+    /// Method to create a new instance of object type `Self` 
+    /// if an object with provided properties doesn't exist already.
+    /// - Returns: An object of type Self.
+    static func upsert(properties: [Key: AnyObject]) -> Self {
+        return NSManagedObjectContext.defaultContext().upsert(self, properties: properties)
+    }
+}
+
+/*
  Extension methods for creating NSManagedObject
  */
 public extension ManagedObjectType where Self: NSManagedObject {
