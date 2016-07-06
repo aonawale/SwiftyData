@@ -211,4 +211,26 @@ class SwiftyDataTests: XCTestCase {
         let someone = Person.findOne(where: predicate)
         XCTAssertNotNil(someone)
     }
+    
+    func testUpdateObjects() {
+        _ = Person.bulkCreate([.name: "ayo", .age: 19], [.name: "ahmed", .age: 29], [.name: "Onawale", .age: 32])
+        Person.save()
+        
+        Person.update(where: "name BEGINSWITH[cd] %@", arguments: "ah", with: [.name: "Ahmed"])
+        XCTAssertNotNil(Person.findOne(where: [.name: "Ahmed"]))
+        
+        let updatedCount = Person.update(where: "age < 30", with: [.age: 30], resultType: .UpdatedObjectsCountResultType) as? Int
+        XCTAssertEqual(updatedCount, 2)
+        XCTAssertEqual(Person.find(where: "age >= 30").count, 3)
+
+        Person.update(where: [.name: "ayo"], with: [.name: "Ayo"])
+        XCTAssertNotNil(Person.findOne(where: [.name: "Ayo"]))
+
+        let age = NSPredicate(format: "age == 30")
+        let name = NSPredicate(format: "name == %@", "Ahmed")
+        let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [age, name])
+        Person.update(where: predicate, with:[.name: "ahmed", .age: 29])
+        let ahmed = Person.findOne(where: [.name: "ahmed", .age: 29])
+        XCTAssertNotNil(ahmed)
+    }
 }
