@@ -107,8 +107,11 @@ public class SwiftyData {
                 return mom
             }
             print("Instantiating the managedObjectModel property")
-            let modelURL = bundle.URLForResource(modelName, withExtension: "momd")
-            _managedObjectModel = NSManagedObjectModel(contentsOfURL: modelURL!)
+            if let modelURL = bundle.URLForResource(modelName, withExtension: "momd") {
+                _managedObjectModel = NSManagedObjectModel(contentsOfURL: modelURL)
+            } else {
+                _managedObjectModel = NSManagedObjectModel.mergedModelFromBundles([bundle])
+            }
             return _managedObjectModel!
         }
     }

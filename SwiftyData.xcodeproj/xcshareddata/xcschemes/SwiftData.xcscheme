@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "85110E651D232E4800BC116D"
-               BuildableName = "SwiftyData.xctest"
+               BuildableName = "SwiftyDataTests.xctest"
                BlueprintName = "SwiftyDataTests"
                ReferencedContainer = "container:SwiftyData.xcodeproj">
             </BuildableReference>

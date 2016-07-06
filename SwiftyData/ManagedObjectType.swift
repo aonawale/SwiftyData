@@ -166,6 +166,37 @@ public extension ManagedObjectType where Self: NSManagedObject, Self: KeyCodeabl
 }
 
 /*
+ Extension methods for updating NSManagedObject.
+ */
+public extension ManagedObjectType where Self: NSManagedObject, Self: KeyCodeable, Self.Key: Hashable, Self.Key.RawValue == String {
+    /// This method performs batch updates on NSManagedObject
+    /// - Parameters:
+    ///   - where: A dictionary specifying they keys and value to find.
+    ///   - with: A dictionary specifying the keys and values of properties of objects to update.
+    ///   - resultType: The type of result to return after the update is done. 
+    ///     The default value is `StatusOnlyResultType`
+    /// - Returns: The returned value is of type `AnyObject` that can be downcast to the specified `resultType` parameter.
+    static func update(where where: [Key: AnyObject], with: [Key: AnyObject],
+                             resultType: NSBatchUpdateRequestResultType = .StatusOnlyResultType) -> AnyObject? {
+        return NSManagedObjectContext.defaultContext().update(self, where: `where`, with: with, resultType: resultType)
+    }
+    
+    /// This method performs batch updates on NSManagedObject
+    /// - Parameters:
+    ///   - where: A format string for the new predicate.
+    ///   - arguments: The arguments to substitute into predicate format. Values are substituted
+    ///     into where format string in the order they appear in the argument list.
+    ///   - with: A dictionary specifying the keys and values of properties of objects to update.
+    ///   - resultType: The type of result to return after the update is done.
+    ///     The default value is `StatusOnlyResultType`
+    /// - Returns: The returned value is of type `AnyObject` that can be downcast to the specified `resultType` parameter.
+    static func update(where where: AnyObject?, arguments: AnyObject..., with: [Key: AnyObject],
+                             resultType: NSBatchUpdateRequestResultType = .StatusOnlyResultType) -> AnyObject? {
+        return NSManagedObjectContext.defaultContext().update(self, where: `where`, arguments: arguments, with: with, resultType: resultType)
+    }
+}
+
+/*
  Extension methods for creating NSManagedObject
  */
 public extension ManagedObjectType where Self: NSManagedObject {

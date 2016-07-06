@@ -108,4 +108,15 @@ public extension KeyCodeable where Key: Hashable, Key.RawValue == String {
     static func sortDiscriptorsFromDictionary(dictionary: [Key: Sort]) -> [NSSortDescriptor] {
         return dictionary.map { NSSortDescriptor(key: $0.0.rawValue, ascending: $0.1.value) }
     }
+    
+    /// Construct a dictionsry with keys replaced with the current keys rawValue.
+    /// - Parameter dictionary: A Dictionary of type [Key: AnyObject].
+    /// - Returns: A dictionary of type `[String: AnyObject]`.
+    static func rawKeysFromDictionary(dictionary: [Key: AnyObject]) -> [String: AnyObject] {
+        return dictionary.reduce([:]) { (pre, next) in
+            var pre = pre
+            pre[next.0.rawValue] = next.1
+            return pre
+        }
+    }
 }

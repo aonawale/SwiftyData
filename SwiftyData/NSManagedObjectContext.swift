@@ -132,6 +132,53 @@ public extension NSManagedObjectContext {
 }
 
 /*
+ Extension methods for updating NSManagedObject.
+ */
+public extension NSManagedObjectContext {
+    /// This method performs batch updates on NSManagedObject
+    /// - Parameters:
+    ///   - entity: The type of object to find. // e.g: NSManagedObject.self
+    ///   - where: A dictionary specifying they keys and value to find.
+    ///   - with: A dictionary specifying the keys and values of properties of objects to update.
+    ///   - resultType: The type of result to return after the update is done.
+    ///     The default value is `StatusOnlyResultType`
+    /// - Returns: The returned value is of type `AnyObject` that can be downcast to the specified `resultType` parameter.
+    public func update<T: NSManagedObject where T: ManagedObjectType, T: KeyCodeable, T.Key.RawValue == String>
+        (entity: T.Type, where: [T.Key: AnyObject], with: [T.Key: AnyObject],
+         resultType: NSBatchUpdateRequestResultType = .StatusOnlyResultType) -> AnyObject? {
+        let predicate = predicateFor(entity, condition: `where`)
+        return update(entity, where: predicate, with: with, resultType: resultType)
+    }
+    
+    /// This method performs batch updates on NSManagedObject
+    /// - Parameters:
+    ///   - entity: The type of object to find. // e.g: NSManagedObject.self
+    ///   - where: A format string for the new predicate.
+    ///   - arguments: The arguments to substitute into predicate format. Values are substituted
+    ///     into where format string in the order they appear in the argument list.
+    ///   - with: A dictionary specifying the keys and values of properties of objects to update.
+    ///   - resultType: The type of result to return after the update is done.
+    ///     The default value is `StatusOnlyResultType`
+    /// - Returns: The returned value is of type `AnyObject` that can be downcast to the specified `resultType` parameter.
+    public func update<T: NSManagedObject where T: ManagedObjectType, T: KeyCodeable, T.Key.RawValue == String>
+        (entity: T.Type, where: AnyObject?, arguments: AnyObject..., with: [T.Key: AnyObject],
+         resultType: NSBatchUpdateRequestResultType = .StatusOnlyResultType) -> AnyObject? {
+        let args = arguments.first as? [AnyObject] ?? arguments
+        let batchUpdateRequest = NSBatchUpdateRequest(entityName: entity.entityName)
+        batchUpdateRequest.predicate = predicateFor(entity, condition: `where`, args: args)
+        batchUpdateRequest.propertiesToUpdate = entity.rawKeysFromDictionary(with)
+        batchUpdateRequest.resultType = resultType
+        do {
+            return (try executeRequest(batchUpdateRequest) as! NSBatchUpdateResult).result
+        } catch {
+            print("NSBatchUpdateRequest error: \(error)")
+            rollback()
+        }
+        return nil
+    }
+}
+
+/*
  Extension methods for finding one NSManagedObject.
  */
 public extension NSManagedObjectContext {
