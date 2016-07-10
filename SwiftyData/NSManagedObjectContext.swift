@@ -48,7 +48,7 @@ public extension NSManagedObjectContext {
     /// This method returns the default NSManagedObjectContext used.
     /// - Returns: The default NSManagedObjectContext used.
     public static func defaultContext() -> NSManagedObjectContext {
-        return SwiftyData.sharedInstance.managedObjectContext
+        return SwiftyData.sharedData.managedObjectContext
     }
 }
 

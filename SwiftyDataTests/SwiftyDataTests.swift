@@ -47,6 +47,8 @@ extension Person: KeyCodeable {
 class SwiftyDataTests: XCTestCase {
     override func setUp() {
         super.setUp()
+        SwiftyData.sharedData.bundle = NSBundle(forClass: self.dynamicType)
+        SwiftyData.sharedData.logLevel = .None
     }
     
     override func tearDown() {
@@ -173,14 +175,14 @@ class SwiftyDataTests: XCTestCase {
         
         let name = NSSortDescriptor(key: "name", ascending: false)
         let age = NSSortDescriptor(key: "age", ascending: true)
-        let sorted2 = Person.find(where: "age > %@", arguments: 10, "ME", sort: [name, age])
+        let sorted2 = Person.find(where: "age > 10", sort: [name, age])
         XCTAssertEqual(sorted2.first?.name, "Onawale")
         XCTAssertEqual(sorted2.last?.name, "Ahmed")
     }
     
     func testObjectsFetchLimit() {
         _ = Person.bulkCreate([.name: "Ayo", .age: 19], [.name: "Ahmed", .age: 29], [.name: "Onawale", .age: 32])
-        let justTwo = Person.find(where: "age > %@", arguments: 10, limit: 2)
+        let justTwo = Person.find(where: "age > 10", limit: 2)
         XCTAssertEqual(justTwo.count, 2)
     }
     
@@ -203,7 +205,7 @@ class SwiftyDataTests: XCTestCase {
         XCTAssertEqual(ahmed?.name, "Ahmed")
         XCTAssertEqual(ahmed?.age, 29)
         
-        let ayo = Person.findOne(where: "age < %@", arguments: 20)
+        let ayo = Person.findOne(where: "age < 20")
         XCTAssertEqual(ayo?.name, "Ayo")
         XCTAssertEqual(ayo?.age, 19)
         
@@ -230,8 +232,7 @@ class SwiftyDataTests: XCTestCase {
         let name = NSPredicate(format: "name == %@", "Ahmed")
         let predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [age, name])
         Person.update(where: predicate, with:[.name: "ahmed", .age: 29])
-        let ahmed = Person.findOne(where: [.name: "ahmed", .age: 29])
-        XCTAssertNotNil(ahmed)
+        XCTAssertNotNil(Person.findOne(where: [.name: "ahmed", .age: 29]))
     }
     
     func testUpsertObject() {

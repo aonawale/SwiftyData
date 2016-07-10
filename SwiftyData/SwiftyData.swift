@@ -30,31 +30,34 @@
 
 import CoreData
 
+public enum LogLevel {
+    case None, Info, Debug
+}
+
 public class SwiftyData {
     
     private init() {}
     
-    public static let sharedInstance = SwiftyData()
+    public static let sharedData = SwiftyData()
     
-    private var bundle: NSBundle {
-        if let _ = NSClassFromString("XCTest") {
-            return NSBundle(identifier: "com.ahmedonawale.SwiftyDataTests")!
-        }
-        return NSBundle.mainBundle()
-    }
+    public var logLevel = LogLevel.Debug
     
-    private var _appName: String?
+    private var _bundle: NSBundle?
     
-    public var appName: String {
+    public var bundle: NSBundle {
         get {
-            if let name = _appName {
-                return name
+            if let bundle = _bundle {
+                return bundle
             }
-            return bundle.infoDictionary!["CFBundleName"] as! String
+            return NSBundle.mainBundle()
         }
         set {
-            _appName = newValue
+            _bundle = newValue
         }
+    }
+    
+    private var appName: String {
+        return bundle.infoDictionary?["CFBundleName"] as? String ?? "SwiftyData"
     }
     
     private var _managedObjectContext: NSManagedObjectContext?
@@ -64,10 +67,10 @@ public class SwiftyData {
             if let context = _managedObjectContext {
                 return context
             }
-            print("Instantiating the managedObjectContext property")
             let context = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
             context.persistentStoreCoordinator = persistentStoreCoordinator
             _managedObjectContext = context
+            log("Instantiating the managedObjectContext property ", context)
             return context
         }
         set {
@@ -81,20 +84,20 @@ public class SwiftyData {
         if let store = _persistentStoreCoordinator {
             return store
         }
-        print("Instantiating the persistentStoreCoordinator property")
-        let coordinator = persistentStoreCoordinatorType(NSSQLiteStoreType, storeURL: sqliteStoreURL)
+        let coordinator = persistentStoreCoordinator(type: NSSQLiteStoreType, storeURL: sqliteStoreURL)
+        log("Instantiating the persistentStoreCoordinator property ", coordinator)
         _persistentStoreCoordinator = coordinator
         return coordinator
     }
     
-    private func persistentStoreCoordinatorType(storeType: String, storeURL: NSURL?) -> NSPersistentStoreCoordinator {
+    private func persistentStoreCoordinator(type storeType: String, storeURL: NSURL?) -> NSPersistentStoreCoordinator {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: managedObjectModel)
         do {
             let storeOptions = [NSMigratePersistentStoresAutomaticallyOption: true,
                                 NSInferMappingModelAutomaticallyOption: true]
             try coordinator.addPersistentStoreWithType(storeType, configuration: nil, URL: storeURL, options: storeOptions)
         } catch {
-            print("Error adding a persistence store with type: \(storeType) to persistentStoreCoordinator: ", error)
+            log("Error adding a persistence store with type: \(storeType) to persistentStoreCoordinator ", error)
         }
         return coordinator
     }
@@ -102,46 +105,35 @@ public class SwiftyData {
     private var _managedObjectModel: NSManagedObjectModel?
     
     public var managedObjectModel: NSManagedObjectModel {
-        get {
-            if let mom = _managedObjectModel {
-                return mom
-            }
-            print("Instantiating the managedObjectModel property")
-            if let modelURL = bundle.URLForResource(modelName, withExtension: "momd") {
-                _managedObjectModel = NSManagedObjectModel(contentsOfURL: modelURL)
-            } else {
-                _managedObjectModel = NSManagedObjectModel.mergedModelFromBundles([bundle])
-            }
-            return _managedObjectModel!
+        if let mom = _managedObjectModel {
+            return mom
         }
+        if let resource = modelName, modelURL = bundle.URLForResource(resource, withExtension: "momd") {
+            _managedObjectModel = NSManagedObjectModel(contentsOfURL: modelURL)
+        } else {
+            _managedObjectModel = NSManagedObjectModel.mergedModelFromBundles([bundle])
+        }
+        log("Instantiating the managedObjectModel property ", _managedObjectModel)
+        return _managedObjectModel!
     }
     
-    private var _modelName: String?
-    
-    public var modelName: String {
-        get {
-            if let model = _modelName {
-                return model
-            }
-            print("Instantiating the modelName property")
-            return appName
-        }
-        set {
-            _modelName = newValue
+    public var modelName: String? {
+        didSet {
             _managedObjectContext = nil
             _persistentStoreCoordinator = nil
         }
     }
     
     private lazy var applicationDocumentsDirectory: NSURL = {
-        print("Instantiating the applicationDocumentsDirectory property")
-        let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-        return urls.last!
+        let documentsDirectory = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).last!
+        debugPrint("Instantiating the applicationDocumentsDirectory property ", documentsDirectory)
+        return documentsDirectory
     }()
     
     private var sqliteStoreURL: NSURL {
-        print("Instantiating the sqliteStoreURL property")
-        return applicationDocumentsDirectory.URLByAppendingPathComponent(databaseName)
+        let url = applicationDocumentsDirectory.URLByAppendingPathComponent(databaseName)
+        log("Instantiating the sqliteStoreURL property ", url)
+        return url
     }
     
     private var _databaseName: String?
@@ -151,13 +143,24 @@ public class SwiftyData {
             if let db = _databaseName {
                 return db
             }
-            print("Instantiating the databaseName property")
+            log("Instantiating the databaseName property ", "\(appName).sqlite")
             return "\(appName).sqlite"
         }
         set {
-            _databaseName = newValue
+            _databaseName = "\(newValue).sqlite"
             _managedObjectContext = nil
             _persistentStoreCoordinator = nil
+        }
+    }
+    
+    private func log(message: String, _ items: Any...) {
+        switch logLevel {
+        case .Info:
+            print(message)
+        case .Debug:
+            debugPrint(message, items)
+        default:
+            return
         }
     }
     
