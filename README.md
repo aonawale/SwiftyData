@@ -22,6 +22,7 @@
 - [Aggregation](#aggregation)
 - [Batch Update](#batch-update)
 - [Custom SwiftyData](#custom-swiftydata)
+- [Relationships](#relationships)
 
 ## Requirements
 
@@ -91,6 +92,16 @@ import SwiftyData
 class Person: NSManagedObject {
     @NSManaged var name: String
     @NSManaged var age: Int64
+}
+```
+
+If your model name is not the same as your class name you should override the `entityName` property of `NSManagedObject` and return the model name for the class.
+
+```swift
+extension Person {
+    override class var entityName: String {
+        return "Human"
+    }
 }
 ```
 
@@ -237,7 +248,7 @@ let foo = Person.find(where: "name == %@ AND age == %@", arguments: "Foo", 18)
 // Finds Person named Bar that has age 20
 let bar = Person.find(where: [.name: "Bar", .age: 20])
 
-// Finds all Person greater than 18 years old 
+// Finds all Person greater than 18 years old
 let predicate = NSPredicate(format: "age > 18")
 let greaterThan18 = Person.find(where: predicate)
 ```
@@ -332,21 +343,80 @@ func application(application: UIApplication, didFinishLaunchingWithOptions launc
 
 You can set a database name if you don't want the default behaviour which uses the application name. You can set this before you return from your AppDelegate's `application didFinishLaunchingWithOptions` method.
 
-```
+```swift
 SwiftyData.sharedData.databaseName = "MyDatabase"
 ```
 
 You can also set a custom managed object context before returning from `application didFinishLaunchingWithOptions` method if you don't prefer to use the default one.
 
-```
+```swift
 let context = NSManagedObjectContext(concurrencyType: ...)
 SwiftyData.sharedData.managedObjectContext = context
 ```
 
+## Relationships
+
+Creating objects relationships is as easy as setting their properties. Consider the following example:
+
+```swift
+class Employee: Person {
+    @NSManaged var employmentDate: NSDate
+    @NSManaged var department: Department?
+}
+
+extension Employee {
+    enum Key: String {
+        case name, age, employmentDate, department
+    }
+}
+
+class Department: NSManagedObject {
+    @NSManaged var name: String
+    @NSManaged var employees: [Employee]
+}
+
+extension Department: KeyCodeable {
+    enum Key: String {
+        case name, employees
+    }
+
+    override class var entityName: String {
+        return "Organization"
+    }
+}
+```
+
+```swift
+let employee = Employee.create([.employmentDate: NSDate()])
+let department = Department.create([.name: "Accounting", .employees: []])
+
+employee.department // nil
+department.employees.isEmpty // true
+
+employee.department = department
+
+employee.department // returns department
+department.employees.isEmpty // false
+
+employee.destroy()
+employee.save()
+
+department.employees.isEmpty // true
+
+// You can supply related objects during initialization if you want
+let employees = (1...20).map { Employee.create([.employmentDate: NSDate(timeIntervalSinceNow: NSTimeInterval($0))]) }
+let department = Department.create([.name: "Health", .employees: employees])
+
+department.employees.count // 20
+Employee.find(where: "department == %@", arguments: department).count // 20
+```
+
+
+
+
 ## Roadmap
 
 - Realm support
-- Object Relationships
 - JSON support
 
 

@@ -45,10 +45,10 @@ public extension KeyCodeable where Self: NSManagedObject, Key: Hashable, Key.Raw
     /// Method to update the properties of a NSManagedObject.
     /// - Parameter properties: A dictionary of type [Key: AnyObject], where Key is RawRepresentable.
     func set(properties: [Key: AnyObject]) {
-        let dictionary = properties.reduce([:]) { (previous, next) -> [String: AnyObject] in
-            var previous = previous
-            previous[next.0.rawValue] = next.1
-            return previous
+        let dictionary = properties.reduce([:]) { (prev, next) -> [String: AnyObject] in
+            var prev = prev
+            prev[next.0.rawValue] = next.1
+            return prev
         }
         setValuesForKeysWithDictionary(dictionary)
     }
@@ -90,9 +90,9 @@ public extension KeyCodeable where Key: Hashable {
     ///   arguments from the specified dictionary parameter.
     static func predicateFromDictionary(dictionary: [Key: AnyObject]) -> NSPredicate {
         var args = [AnyObject]()
-        let format = dictionary.reduce("") { (pre, next) in
+        let format = dictionary.reduce("") { (prev, next) in
             args.append(next.1)
-            return pre.isEmpty ? "\(next.0) == %@" : "\(pre) AND \(next.0) == %@"
+            return prev.isEmpty ? "\(next.0) == %@" : "\(prev) AND \(next.0) == %@"
         }
         return NSPredicate(format: format, argumentArray: args)
     }
@@ -113,10 +113,10 @@ public extension KeyCodeable where Key: Hashable, Key.RawValue == String {
     /// - Parameter dictionary: A Dictionary of type [Key: AnyObject].
     /// - Returns: A dictionary of type `[String: AnyObject]`.
     static func rawKeysFromDictionary(dictionary: [Key: AnyObject]) -> [String: AnyObject] {
-        return dictionary.reduce([:]) { (pre, next) in
-            var pre = pre
-            pre[next.0.rawValue] = next.1
-            return pre
+        return dictionary.reduce([:]) { (prev, next) in
+            var prev = prev
+            prev[next.0.rawValue] = next.1
+            return prev
         }
     }
 }
