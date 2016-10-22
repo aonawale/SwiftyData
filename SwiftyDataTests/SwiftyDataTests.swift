@@ -44,6 +44,32 @@ extension Person: KeyCodeable {
     }
 }
 
+class Employee: Person {
+    @NSManaged var employmentDate: NSDate
+    @NSManaged var department: Department?
+}
+
+extension Employee {
+    enum Key: String {
+        case name, age, employmentDate, department
+    }
+}
+
+class Department: NSManagedObject {
+    @NSManaged var name: String
+    @NSManaged var employees: [Employee]
+}
+
+extension Department: KeyCodeable {
+    enum Key: String {
+        case name, employees
+    }
+    
+    override class var entityName: String {
+        return "Organization"
+    }
+}
+
 class SwiftyDataTests: XCTestCase {
     override func setUp() {
         super.setUp()
@@ -54,10 +80,52 @@ class SwiftyDataTests: XCTestCase {
     override func tearDown() {
         super.tearDown()
         Person.destroyAll()
+        Department.destroyAll()
+        Employee.destroyAll()
+    }
+    
+    func testRelationshipCascadeDeleteRule() {
+        let employees = (1...50).map { Employee.create([.employmentDate: NSDate(timeIntervalSinceNow: NSTimeInterval($0))]) }
+        let department = Department.create([.name: "Health", .employees: employees])
+        XCTAssertEqual(department.employees.count, 50)
+        department.destroy()
+        department.save()
+        department.employees.forEach { XCTAssertTrue($0.deleted) }
+    }
+    
+    func testRelationshipInverses() {
+        let employee = Employee.create([.employmentDate: NSDate()])
+        let department = Department.create([.name: "Accounting", .employees: []])
+        XCTAssertTrue(department.employees.isEmpty)
+        XCTAssertNil(employee.department)
+        
+        employee.department = department
+        XCTAssertFalse(department.employees.isEmpty)
+        XCTAssertTrue(department.employees.contains(employee))
+        XCTAssertEqual(employee.department, department)
+        
+        employee.destroy()
+        employee.save()
+        XCTAssertTrue(department.employees.isEmpty)
+    }
+    
+    func testRelationship() {
+        let employees = (1...20).map { Employee.create([.employmentDate: NSDate(timeIntervalSinceNow: NSTimeInterval($0))]) }
+        // if toMany relationship is `ordered`, the type must be an Array, else it must be a Set
+        // like so: var employees: Set<Employee> and must be set like this:
+        // Set(arrayLiteral: employee)
+        let department = Department.create([.name: "Accounting", .employees: employees])
+        XCTAssertEqual(department.employees.count, 20)
+        employees.forEach {
+            XCTAssertTrue(department.employees.contains($0))
+            XCTAssertEqual($0.department, department)
+        }
+        XCTAssertEqual(department.employees.count, Employee.find(where: "department == %@", arguments: department).count)
     }
     
     func testCreateEmptyObject() {
         let person = Person.create()
+        XCTAssertTrue(person.inserted)
         XCTAssertNotNil(person)
         XCTAssertEqual(person.name, "")
         XCTAssertEqual(person.age, 0)
@@ -66,12 +134,14 @@ class SwiftyDataTests: XCTestCase {
     func testUpdateObject() {
         let person = Person.create()
         person.set([.name: "Ahmed", .age: 18])
+        XCTAssertTrue(person.hasChanges)
         XCTAssertEqual(person.name, "Ahmed")
         XCTAssertEqual(person.age, 18)
     }
 
     func testCreateObjectWithProperties() {
         let person = Person.create([.name: "Onawale", .age: 20])
+        XCTAssertTrue(person.inserted)
         XCTAssertEqual(person.name, "Onawale")
         XCTAssertEqual(person.age, 20)
         let prop = person.get([.name, .age])
@@ -107,6 +177,7 @@ class SwiftyDataTests: XCTestCase {
         let person = Person.create()
         XCTAssertNotNil(person)
         person.destroy()
+        XCTAssertTrue(person.deleted)
         XCTAssertNil(Person.findById(person.objectID))
     }
     

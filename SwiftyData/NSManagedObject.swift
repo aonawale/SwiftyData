@@ -31,6 +31,10 @@
 import CoreData
 
 extension NSManagedObject: ManagedObjectType {
+    public class var entityName: String {
+        return String(self)
+    }
+    
     subscript(key: String) -> AnyObject? {
         get {
             return self.valueForKey(key)
