@@ -140,7 +140,7 @@ let context = NSManagedObjectContext.defaultContext()
 context.create(Person)
 context.create(Person.self, properties: [.name: "Foo", .age: 18])
 ```
-> All the methods available on NSManagedObject subclasses are also available on NSManagedObject. Difference is that the context takes as it's first argument the class name on which to operate on.
+> All the methods available on NSManagedObject subclasses are also available on NSManagedObjectContext. Difference is that the context takes as it's first argument the class name on which to operate on.
 
 ### Get and set properties
 
@@ -263,7 +263,7 @@ Person.find(where: [:], sort: [.name: .ASC])
 // Finds all Person and sort by name and age
 let byName = NSSortDescriptor(key: "name", ascending: false)
 let byAge = NSSortDescriptor(key: "age", ascending: true)
-let sorted = Person.find(where: "age > %@", arguments: 10, "ME", sort: [byName, byAge])
+let sorted = Person.find(where: "age > %@", arguments: 10, sort: [byName, byAge])
 ```
 
 ### Limiting
